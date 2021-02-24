@@ -17,7 +17,7 @@
 %define parse.error verbose
 
 %code {
-    #include "CompilerDriver.h"
+    #include "../CompilerDriver.h"
     #include "location.hh"
 
     /* Redefine parser to use our function from scanner */

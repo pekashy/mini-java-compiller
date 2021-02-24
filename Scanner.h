@@ -7,7 +7,7 @@
 #undef YY_DECL
 #define YY_DECL yy::parser::symbol_type Scanner::ScanToken()
 
-#include "parser.hh"
+#include "FlexBisonOutput/parser.hh"
 
 class CompilerDriver;
 

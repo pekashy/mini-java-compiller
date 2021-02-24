@@ -1,10 +1,9 @@
 #pragma once
 #include "Scanner.h"
 
-
 class CompilerDriver {
 public:
-    CompilerDriver() = default;
+    CompilerDriver() {std::cout << "blah blah" << std::endl;};
     int parse(const std::string& f) { return false;}
     bool result = false;
     yy::location location;

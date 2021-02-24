@@ -8,31 +8,30 @@ set(CMAKE_CXX_STANDARD 17)
 set(
         HEADERS
         CompilerDriver.h
-        ${MiniJava_SOURCE_DIR}/parser.hh
 )
 
 BISON_TARGET(
         MiniJavaParser
         parser.y
-        ${MiniJava_SOURCE_DIR}/parser.cpp
-        DEFINES_FILE ${MiniJava_SOURCE_DIR}/parser.hh
+        ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput/parser.cpp
+        DEFINES_FILE ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput/parser.hh
 )
 
 FLEX_TARGET(
         MiniJavaScanner
         Scanner.l
-        ${MiniJava_SOURCE_DIR}/Scanner.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput/Scanner.cpp
 )
 
 ADD_FLEX_BISON_DEPENDENCY(MiniJavaScanner MiniJavaParser)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput)
 
 add_executable(
         MiniJavaParser
         main.cpp
-        ${BISON_MiniJavaParser_OUTPUTS}
-        ${FLEX_MiniJavaScanner_OUTPUTS}
+        FlexBisonOutput/parser.hh FlexBisonOutput/parser.cpp
+        FlexBisonOutput/Scanner.cpp
         CompilerDriver.cpp CompilerDriver.h
-        ProgramTree.cpp ProgramTree.h )
+        ProgramTree.cpp ProgramTree.h Scanner.h)
 
 
