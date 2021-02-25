@@ -1,24 +1,27 @@
+#include "CompilerDriver.h"
+
 #include <iostream>
 
-#include "CompilerDriver.h"
 
 int main(int argc, char** argv) {
     int result = 0;
-    CompilerDriver driver;
+    bool bTraceParsing = false;
+    bool bTraceScanning = false;
+    bool bLocationDebug = false;
+    std::string rParseString;
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i] == std::string("-p")) {
-            driver.trace_parsing = true;
+            bTraceParsing = true;
         } else if (argv[i] == std::string("-s")) {
-            driver.trace_scanning = true;
+            bTraceScanning = true;
         } else if (argv[i] == std::string("-l")) {
-            driver.location_debug = true;
-        } else if (!driver.parse(argv[i])) {
-            std::cout << driver.result << std::endl;
+            bLocationDebug = true;
         } else {
-            result = 1;
+            rParseString = argv[i];
         }
     }
 
-    return result;
+    auto pDriver = CompilerDriver::Create(bTraceParsing, bTraceScanning, bLocationDebug);
+    return pDriver->ResetLocation(rParseString);
 }

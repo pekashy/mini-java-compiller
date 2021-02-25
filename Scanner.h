@@ -8,14 +8,18 @@
 #define YY_DECL yy::parser::symbol_type Scanner::ScanToken()
 
 #include "FlexBisonOutput/parser.hh"
+#include <memory>
 
 class CompilerDriver;
+class Location;
 
 class Scanner: public yyFlexLexer {
 public:
-    Scanner(CompilerDriver& driver): driver(driver) {}
-    virtual ~Scanner() {}
+    Scanner(std::shared_ptr<CompilerDriver> pDriver);
+    virtual ~Scanner() = default;
     virtual yy::parser::symbol_type ScanToken();
-    CompilerDriver &driver;
     void UpdateLocation();
+private:
+    std::shared_ptr<CompilerDriver> m_pDriver;
+    std::shared_ptr<Location> m_pLocation;
 };

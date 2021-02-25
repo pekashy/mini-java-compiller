@@ -6,6 +6,7 @@
     #include <string>
     #include <iostream>
     #include "../CompilerDriver.h"
+    #include "../Location.h"
     #include "parser.hh"
 %}
 
@@ -25,10 +26,7 @@
   );
 
   void Scanner::UpdateLocation() {
-    if (driver.location_debug) {
-        std::cerr << "Action called " << driver.location << std::endl;
-    }
-    driver.location.columns(yyleng);
+    m_pLocation->Update(yyleng);
   }
 %}
 
@@ -42,13 +40,14 @@ blank [ \t\r]
 
 
 %%
-%{
-  // A handy shortcut to the location held by the driver.
-  yy::location& loc = driver.location;
-  // Code run each time yylex is called.
-  //loc.step();
-%}
-
-{blank}+  {loc.step ();}
-<<EOF>>    return yy::parser::make_END (loc);
+{blank}+   m_pLocation->Step();
+\n+        m_pLocation->SkipEmptyLines(yyleng);
+"-"        return m_pLocation->MakeMinus();
+"+"        return m_pLocation->MakePlus();
+"*"        return m_pLocation->MakeStar();
+"/"        return m_pLocation->MakeSlash();
+"("        return m_pLocation->MakeLParen();
+")"        return m_pLocation->MakeRParen();
+":="       return m_pLocation->MakeAssign();
+<<EOF>>    ;
 %%

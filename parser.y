@@ -8,9 +8,17 @@
 
 %code requires {
     #include <string>
+    class Location;
     class Scanner;
     class CompilerDriver;
-    class ProgramTree;
+    class Expression;
+    class NumberExpression;
+    class AddExpression;
+    class SubstractExpression;
+    class DivExpression;
+    class IdentExpression;
+    class Assignment;
+    class AssignmentList;
 }
 
 %define parse.trace
@@ -18,10 +26,20 @@
 
 %code {
     #include "../CompilerDriver.h"
+    #include "../Location.h"
+    #include "../Scanner.h"
     #include "location.hh"
 
-    /* Redefine parser to use our function from scanner */
-    static yy::parser::symbol_type yylex(Scanner &scanner, CompilerDriver& driver) {
+    #include "../expressions/NumberExpression.h"
+    #include "../expressions/AddExpression.h"
+    #include "../expressions/MulExpression.h"
+    #include "../expressions/DivExpression.h"
+    #include "../expressions/SubstractExpression.h"
+    #include "../expressions/IdentExpression.h"
+    #include "../assignments/Assignment.h"
+    #include "../assignments/AssignmentList.h"
+
+    static yy::parser::symbol_type yylex(Scanner& scanner, CompilerDriver& driver) {
         return scanner.ScanToken();
     }
 }
@@ -35,10 +53,16 @@
 %locations
 
 %define api.token.prefix {TOK_}
-%nterm <ProgramTree*> unit
 
 %token
     END 0 "end of file"
+    ASSIGN ":="
+    MINUS "-"
+    PLUS "+"
+    STAR "*"
+    SLASH "/"
+    LPAREN "("
+    RPAREN ")"
 ;
 // %printer { yyo << $$; } <*>;
 

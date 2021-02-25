@@ -32,6 +32,14 @@ add_executable(
         FlexBisonOutput/parser.hh FlexBisonOutput/parser.cpp
         FlexBisonOutput/Scanner.cpp
         CompilerDriver.cpp CompilerDriver.h
-        ProgramTree.cpp ProgramTree.h Scanner.h)
+        expressions/NumberExpression.cpp
+        expressions/MulExpression.cpp
+        expressions/AddExpression.cpp
+        expressions/SubstractExpression.cpp
+        expressions/DivExpression.cpp
+        expressions/IdentExpression.cpp
+        assignments/Assignment.cpp
+        assignments/AssignmentList.cpp
+        ProgramTree.cpp ProgramTree.h Scanner.h Location.cpp Location.h ScannerImpl.cpp)
 
 
