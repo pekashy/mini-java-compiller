@@ -10,8 +10,9 @@ class CompilerDriver
 public:
     using Ptr = std::shared_ptr<CompilerDriver>;
     static Ptr Create(bool bTraceParsing, bool bTraceScanning, bool bDebugLocation);
-    virtual int ResetLocation(const std::string& f) = 0;
-    virtual std::shared_ptr<Location> GetLocation() const = 0;
+    virtual int Parse(const std::string& f) = 0;
+    virtual void SetProgram(std::shared_ptr<Program> pProgram) = 0;
+
     virtual ~CompilerDriver() = default;
 protected:
     CompilerDriver() = default;

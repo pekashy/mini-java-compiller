@@ -23,5 +23,5 @@ int main(int argc, char** argv) {
     }
 
     auto pDriver = CompilerDriver::Create(bTraceParsing, bTraceScanning, bLocationDebug);
-    return pDriver->ResetLocation(rParseString);
+    return pDriver->Parse(rParseString);
 }

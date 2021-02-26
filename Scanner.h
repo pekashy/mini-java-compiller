@@ -15,7 +15,9 @@ class Location;
 
 class Scanner: public yyFlexLexer {
 public:
-    Scanner(std::shared_ptr<CompilerDriver> pDriver);
+    using Ptr = std::shared_ptr<Scanner>;
+
+    Scanner(std::shared_ptr<CompilerDriver> shDriver, std::shared_ptr<Location> shLocation);
     virtual ~Scanner() = default;
     virtual yy::parser::symbol_type ScanToken();
     void UpdateLocation();

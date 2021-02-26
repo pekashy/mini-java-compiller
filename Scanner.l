@@ -15,31 +15,20 @@
 %option c++
 %option yyclass="Scanner"
 
-
-%{
-  // Code definitions at the end of scanner.cpp
-
-  // A number symbol corresponding to the value in S.
-  yy::parser::symbol_type make_NUMBER(
-    const std::string &s,
-    const yy::parser::location_type& loc
-  );
-
-  void Scanner::UpdateLocation() {
-    m_pLocation->Update(yyleng);
-  }
-%}
-
+id    [a-zA-Z][a-zA-Z_0-9]*
+int   [0-9]+
 blank [ \t\r]
-
 
 %{
   // Code run each time a pattern is matched.
-  #define YY_USER_ACTION UpdateLocation();
+  # define YY_USER_ACTION m_pLocation->Update(yyleng);
 %}
 
-
 %%
+%{
+  m_pLocation->Step();
+%}
+
 {blank}+   m_pLocation->Step();
 \n+        m_pLocation->SkipEmptyLines(yyleng);
 "-"        return m_pLocation->MakeMinus();
@@ -49,5 +38,8 @@ blank [ \t\r]
 "("        return m_pLocation->MakeLParen();
 ")"        return m_pLocation->MakeRParen();
 ":="       return m_pLocation->MakeAssign();
-<<EOF>>    ;
+{int}      return m_pLocation->MakeNumber(yytext);
+{id}       return m_pLocation->MakeIdentifier(yytext);
+.          m_pLocation->ThrowError("invalid character: " + std::string(yytext));
+<<EOF>>    return m_pLocation->MakeEnd();
 %%

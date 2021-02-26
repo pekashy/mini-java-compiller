@@ -40,6 +40,7 @@ add_executable(
         expressions/IdentExpression.cpp
         assignments/Assignment.cpp
         assignments/AssignmentList.cpp
-        ProgramTree.cpp ProgramTree.h Scanner.h Location.cpp Location.h ScannerImpl.cpp)
+        Scanner.h Location.cpp Location.h ScannerImpl.cpp
+        Program.h Program.cpp)
 
 
