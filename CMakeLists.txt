@@ -32,15 +32,11 @@ add_executable(
         FlexBisonOutput/parser.hh FlexBisonOutput/parser.cpp
         FlexBisonOutput/Scanner.cpp
         CompilerDriver.cpp CompilerDriver.h
-        expressions/NumberExpression.cpp
-        expressions/MulExpression.cpp
-        expressions/AddExpression.cpp
-        expressions/SubstractExpression.cpp
-        expressions/DivExpression.cpp
-        expressions/IdentExpression.cpp
-        assignments/Assignment.cpp
-        assignments/AssignmentList.cpp
+        Grammar/expressions/NumberExpression.cpp
+        Grammar/expressions/IdentExpression.cpp
+        Grammar/assignments/Assignment.cpp
+        Grammar/assignments/AssignmentList.cpp
         Scanner.h Location.cpp Location.h ScannerImpl.cpp
-        Program.h Program.cpp)
+        Program.h Program.cpp Grammar/statements/Statement.cpp Grammar/statements/Statement.h Grammar/Visitor.cpp Grammar/Visitor.h Grammar/GrammarNode.cpp Grammar/GrammarNode.h Grammar/statements/AssertStatement.cpp Grammar/statements/AssertStatement.h Grammar/NodeFactory.cpp Grammar/NodeFactory.h Grammar/expressions/ArythmExpression.cpp Grammar/expressions/ArythmExpression.h)
 
 
