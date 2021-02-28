@@ -37,7 +37,7 @@ blank [ \t\r]
 "/"        return m_pLocation->MakeSlash();
 "("        return m_pLocation->MakeLParen();
 ")"        return m_pLocation->MakeRParen();
-":="       return m_pLocation->MakeAssign();
+"="       return m_pLocation->MakeAssign();
 {int}      return m_pLocation->MakeNumber(yytext);
 {id}       return m_pLocation->MakeIdentifier(yytext);
 .          m_pLocation->ThrowError("invalid character: " + std::string(yytext));
