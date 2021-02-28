@@ -12,8 +12,6 @@ namespace
         CompilerDriverImpl(bool bTraceParsing, bool bTraceScanning, bool bDebugLocation);
         int Parse(const std::string& f) override;
         void SetProgram(Program::Ptr pProgram) override;
-        //[[nodiscard]] Location::Ptr GetLocation() const override;
-        void Init();
     private:
         std::shared_ptr<Scanner> CreateScanner(const std::string& f);
         std::shared_ptr<yy::parser> CreateParser(const std::shared_ptr<Scanner>& shScanner);
@@ -32,6 +30,7 @@ CompilerDriverImpl::CompilerDriverImpl(bool bTraceParsing, bool bTraceScanning, 
     , m_bDebugLocation(bDebugLocation)
 {}
 
+
 std::shared_ptr<Scanner> CompilerDriverImpl::CreateScanner(const std::string& f)
 {
     auto shLocation = Location::Create(f, m_bDebugLocation);
@@ -47,6 +46,8 @@ std::shared_ptr<yy::parser> CompilerDriverImpl::CreateParser(const std::shared_p
     shParser->set_debug_level(m_bTraceParsing);
     return shParser;
 }
+
+
 int CompilerDriverImpl::Parse(const std::string& f)
 {
     if (f.empty () || f == "-")
@@ -57,8 +58,9 @@ int CompilerDriverImpl::Parse(const std::string& f)
     auto shScanner = CreateScanner(f);
     auto shParser = CreateParser(shScanner);
     std::ifstream programStream(f);
+    std::ifstream programStream2(f);
+    std::cout << programStream2.rdbuf();
     shScanner->yyrestart(programStream);
-    //m_pScanner->yyrestart(programStream);
     return (*shParser)();
 }
 

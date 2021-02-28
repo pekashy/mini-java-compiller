@@ -76,7 +76,7 @@
 %%
 %start unit;
 
-unit: assignments exp { driver.SetProgram(Program::Create($1, $2)); return 0;};
+unit: assignments exp {return $2->eval(); };
 
 assignments:
     %empty { $$ = new AssignmentList(); /* A -> eps */}
