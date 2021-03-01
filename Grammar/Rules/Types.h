@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../GrammarNode.h"
-#include "Identifier.h"
+
+class Identifier;
 
 enum class Types
 {
