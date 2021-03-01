@@ -6,7 +6,10 @@
 
 class AssignmentList : public GrammarNode {
  public:
-    void AddAssignment(const GrammarNode::Ptr& pGrammarNode);
+    using Ptr = std::shared_ptr<AssignmentList>;
+    void AddAssignment(const Assignment::Ptr& pAssignment);
+    static Ptr Create();
  private:
+    AssignmentList() = default;
     std::vector<Assignment::Ptr> m_mapAssignmentPtrs;
 };

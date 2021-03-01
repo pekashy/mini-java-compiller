@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Grammar/assignments/AssignmentList.h"
-#include "Grammar/expressions/Expression.h"
+#include "Grammar/Rules/AssignmentList.h"
+#include "Grammar/Rules/Expression.h"
 
 #include <memory>
 

@@ -11,6 +11,7 @@
     #include <memory>
     class Assignment;
     class AssignmentList;
+    class Expression;
     class GrammarNode;
     class Location;
     class Scanner;
@@ -22,7 +23,9 @@
 %define parse.error verbose
 
 %code {
-    #include "../Grammar/NodeFactory.h"
+    #include "../Grammar/Rules/Expression.h"
+    #include "../Grammar/Rules/AssignmentList.h"
+    #include "../Grammar/Rules/Assignment.h"
     #include "../CompilerDriver.h"
     #include "../Location.h"
     #include "../Scanner.h"
@@ -57,7 +60,7 @@
 ;
 %token <std::string> IDENTIFIER "identifier"
 %token <int> NUMBER "number"
-%nterm <std::shared_ptr<GrammarNode>> exp
+%nterm <std::shared_ptr<Expression>> exp
 %nterm <std::shared_ptr<Assignment>> assignment
 %nterm <std::shared_ptr<AssignmentList>> assignments
 %nterm <Program*> unit
@@ -70,17 +73,7 @@ unit: assignments exp { return 0; };
 assignments:
     %empty
     {
-    	// For some mysterious reasomn dynamic_cast is neccessary
-    	auto p = std::dynamic_pointer_cast<AssignmentList>(NodeFactory::CreateAssignmentList());
-    	if(p)
-    	{
-    		$$ = p;
-    	}
-    	else
-    	{
-    		assert(false);
-    	}
-      /*A -> eps */
+    	$$ = AssignmentList::Create();
     }
     | assignments assignment {
         $1->AddAssignment($2); $$ = $1;
@@ -88,7 +81,7 @@ assignments:
 
 assignment:
     "identifier" ":=" exp {
-        $$ = NodeFactory::CreateAssignment($1, $3);
+        $$ = Assignment::Create($1, $3);
         // driver.variables[$1] = $3->eval();
     };
 
@@ -96,12 +89,12 @@ assignment:
 %left "*" "/";
 
 exp:
-    "number" {$$ = NodeFactory::CreateNumberExpression($1);  }
-    | "identifier" {$$ = NodeFactory::CreateIdentExpression($1);  }
-    | exp "+" exp { $$ = NodeFactory::CreateAddExpression($1, $3);  }
-    | exp "-" exp { $$ = NodeFactory::CreateSubstractExpression($1, $3);  }
-    | exp "*" exp { $$ = NodeFactory::CreateMulExpression($1, $3);  }
-    | exp "/" exp { $$ = NodeFactory::CreateDivExpression($1, $3); }
+    "number" {$$ = Expression::CreateNumberExpression($1);  }
+    | "identifier" {$$ = Expression::CreateIdentExpression($1);  }
+    | exp "+" exp { $$ = Expression::CreateAddExpression($1, $3);  }
+    | exp "-" exp { $$ = Expression::CreateSubstractExpression($1, $3);  }
+    | exp "*" exp { $$ = Expression::CreateMulExpression($1, $3);  }
+    | exp "/" exp { $$ = Expression::CreateDivExpression($1, $3); }
     | "(" exp ")" { $$ = $2; };
 
 %%
