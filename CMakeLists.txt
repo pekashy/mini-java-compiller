@@ -38,6 +38,6 @@ add_executable(
         Program.h Program.cpp Grammar/Rules/Statement.cpp Grammar/Rules/Statement.h Grammar/Visitor.cpp
         Grammar/Visitor.h Grammar/GrammarNode.cpp Grammar/GrammarNode.h
         Grammar/Rules/Lvalue.cpp Grammar/Rules/Lvalue.h Grammar/Rules/Identifier.cpp Grammar/Rules/Identifier.h
-        Grammar/Rules/Invocation.cpp Grammar/Rules/Invocation.h Grammar/Rules/Expression.cpp)
+        Grammar/Rules/Invocation.cpp Grammar/Rules/Invocation.h Grammar/Rules/Expression.cpp Grammar/Rules/Types.cpp Grammar/Rules/Types.h)
 
 
