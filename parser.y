@@ -28,6 +28,7 @@
     class Identifier;
     class Formals;
     class Statement;
+    class MethodInvocation;
 }
 
 %define parse.trace
@@ -86,7 +87,14 @@
     LFPARENT "{"
     RFPARENT "}"
     ASSERT "assert"
+    IF "if"
+    ELSE "else"
+    WHILE "while"
+    PRINT "System.out.println"
+    RETURN "return"
 ;
+
+
 %token <std::string> IDENTIFIER "identifier"
 %token <int> NUMBER "number"
 %nterm <std::shared_ptr<Identifier>> identifier
@@ -105,6 +113,7 @@
 %nterm <std::shared_ptr<Formals>> formals
 %nterm <std::shared_ptr<MethodDeclaration>> methodDeclaration
 %nterm <std::shared_ptr<Statement>> statement
+%nterm <std::shared_ptr<MethodInvocation>> methodInvocation
 
 
 %%
@@ -118,8 +127,16 @@ methodDeclaration:
 
 
 statement:
-	  ASSERT "(" exp ")" { Statement::CreateAssertion($3); }
-
+	  ASSERT "(" exp ")" { $$ = Statement::CreateAssertion($3); }
+	| localVariableDeclaration { $$ = Statement::CreateLocalVarDeclaration($1);}
+	| "{" statement "}" { $$ = Statement::CreateInnerStatement($2);}
+	| IF "(" exp ")" statement { $$ = Statement::CreateIf($3, $5);}
+	| IF "(" exp ")" statement ELSE statement { $$ = Statement::CreateIfElse($3, $5, $7);}
+	| WHILE "(" exp ")" statement { $$ = Statement::CreateWhile($3, $5);}
+	| PRINT "(" exp ")" ";" { $$ = Statement::CreatePrint($3);}
+	| lvalue "=" exp ";" { $$ = Statement::CreateAssignment($3, $1);}
+	| RETURN exp ";" { $$ = Statement::CreateReturn($2);}
+	| methodInvocation ";" { $$ = Statement::CreateMethodInvoc($1);}
 
 formals:
 	  type identifier {$$ = Formals::Create($1, $2);}
@@ -157,6 +174,10 @@ lvalue:
 	  identifier { $$ = Lvalue::Create($1); }
 	| identifier "[" exp "]" { $$ = Lvalue::Create($1, $3);}
 	| fieldInvocation { $$ = Lvalue::Create($1); }
+
+
+methodInvocation:
+	  exp "." identifier "(" exp ")" {$$ = MethodInvocation::Create($1, $3, $5);}
 
 
 fieldInvocation:

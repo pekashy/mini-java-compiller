@@ -14,7 +14,7 @@ public:
 
     static Ptr CreateAssertion(const std::shared_ptr<Expression>& pExpression);
     // TODO: Implemet
-    static Ptr CreateLocalVarDeclaration(const std::shared_ptr<Expression>& pDeclaration);
+    static Ptr CreateLocalVarDeclaration(const std::shared_ptr<VariableDeclaration>& pDeclaration);
     static Ptr CreateInnerStatement(const Ptr& pStatement);
     static Ptr CreateIf(const std::shared_ptr<Expression>& pExpression, const Ptr& pStatement);
     static Ptr CreateIfElse(const std::shared_ptr<Expression>& pExpression, const Ptr& pIfStatement, const Ptr& pElseStatement);
