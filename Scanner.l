@@ -55,7 +55,8 @@ blank [ \t\r]
 "while"    return m_pLocation->MakeWhile();
 "System.out.println"         return m_pLocation->MakePrint();
 "class"    return m_pLocation->MakeClass();
-"public static void main()"  return m_pLocation->MakeMain();
+"main"     return m_pLocation->MakeMain();
+"static"     return m_pLocation->MakeStatic();
 {int}      return m_pLocation->MakeNumber(yytext);
 {id}       return m_pLocation->MakeIdentifier(yytext);
 .          m_pLocation->ThrowError("invalid character: " + std::string(yytext));

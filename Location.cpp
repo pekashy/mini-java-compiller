@@ -43,6 +43,7 @@ namespace {
         stype MakePrint() override;
         stype MakeClass() override;
         stype MakeMain() override;
+        stype MakeStatic() override;
 
     private:
         const bool m_bDebug;
@@ -185,6 +186,10 @@ Location::stype LocationImpl::MakeClass() {
 
 Location::stype LocationImpl::MakeMain() {
     return parser::make_MAIN(m_loc);
+}
+
+Location::stype LocationImpl::MakeStatic() {
+    return parser::make_STATIC(m_loc);
 }
 
 Location::stype LocationImpl::MakeEnd() {

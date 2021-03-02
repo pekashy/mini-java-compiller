@@ -48,6 +48,7 @@ public:
     virtual stype MakePrint() = 0;
     virtual stype MakeClass() = 0;
     virtual stype MakeMain() = 0;
+    virtual stype MakeStatic() = 0;
 
 
 

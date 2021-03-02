@@ -1,1 +1,5 @@
-asdaads = 3 + 555
+class HelloWorld {
+  public static void main () {
+    System.out.println (12321);
+  }
+}

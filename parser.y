@@ -95,7 +95,8 @@
     PRINT "System.out.println"
     RETURN "return"
     CLASS "class"
-    MAIN "public static void main()"
+    STATIC "static"
+    MAIN "main"
 ;
 
 
@@ -132,7 +133,7 @@ program:
 
 
 mainClass:
-	  CLASS identifier "{" MAIN "{" statement "}" "}" { $$ = MainClassDeclaration::Create($6, $2); }
+	  CLASS identifier "{" PUBLIC STATIC VOID MAIN "(" ")" "{" statement "}" "}" { $$ = MainClassDeclaration::Create($11, $2); }
 
 
 classDeclaration:
