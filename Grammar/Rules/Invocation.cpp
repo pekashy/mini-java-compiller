@@ -25,6 +25,23 @@ namespace
         Identifier::Ptr m_pIdent;
         Expression::Ptr m_pExpression;
     };
+
+    class MethodInvocationImpl : public MethodInvocation
+    {
+    public:
+        MethodInvocationImpl(const std::shared_ptr<Expression>& calleeExpr, const std::shared_ptr<Identifier>& pIdent,
+                           const std::shared_ptr<Expression>& pArgExpr)
+            : m_pCalleeExpression(calleeExpr)
+            , m_pIdent(pIdent)
+            , m_pArgExpression(pArgExpr)
+        {}
+
+    private:
+        Expression::Ptr m_pCalleeExpression;
+        Identifier::Ptr m_pIdent;
+        Expression::Ptr m_pArgExpression;
+    };
+
 }
 
 FieldInvocation::Ptr FieldInvocation::Create(const Identifier::Ptr& pIdent)
@@ -36,4 +53,11 @@ FieldInvocation::Ptr FieldInvocation::Create(const Identifier::Ptr& pIdent)
 FieldInvocation::Ptr FieldInvocation::Create(const Identifier::Ptr& pIdent, const Expression::Ptr& pExpr)
 {
     return std::make_shared<ArrFieldInvocation>(pIdent, pExpr);
+}
+
+
+MethodInvocation::Ptr MethodInvocation::Create(const std::shared_ptr<Expression>& caleeExpr,
+    const std::shared_ptr<Identifier>& pIdent, const std::shared_ptr<Expression>& pArg)
+{
+    return std::make_shared<MethodInvocationImpl>(caleeExpr, pIdent, pArg);
 }

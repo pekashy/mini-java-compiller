@@ -26,6 +26,8 @@
     class SimpleType;
     class ArrayType;
     class Identifier;
+    class Formals;
+    class Statement;
 }
 
 %define parse.trace
@@ -46,6 +48,7 @@
     #include "../Grammar/Rules/Assignment.h"
     #include "../Grammar/Rules/Types.h"
     #include "../Grammar/Rules/Identifier.h"
+    #include "../Grammar/Rules/Statement.h"
 
     static yy::parser::symbol_type yylex(Scanner& scanner, CompilerDriver& driver) {
         return scanner.ScanToken();
@@ -79,6 +82,10 @@
     INT "int"
     BOOLEAN "boolean"
     VOID "void"
+    PUBLIC "public"
+    LFPARENT "{"
+    RFPARENT "}"
+    ASSERT "assert"
 ;
 %token <std::string> IDENTIFIER "identifier"
 %token <int> NUMBER "number"
@@ -91,10 +98,13 @@
 %nterm <std::shared_ptr<FieldInvocation>> fieldInvocation
 %nterm <std::shared_ptr<VariableDeclaration>> variableDeclaration
 %nterm <std::shared_ptr<VariableDeclaration>> localVariableDeclaration
-%nterm <std::shared_ptr<Type>> simpleType
-%nterm <std::shared_ptr<Type>> arrayType
+%nterm <std::shared_ptr<SimpleType>> simpleType
+%nterm <std::shared_ptr<ArrayType>> arrayType
 %nterm <std::shared_ptr<Type>> type
 %nterm <std::shared_ptr<Identifier>> typeIdentifier
+%nterm <std::shared_ptr<Formals>> formals
+%nterm <std::shared_ptr<MethodDeclaration>> methodDeclaration
+%nterm <std::shared_ptr<Statement>> statement
 
 
 %%
@@ -103,8 +113,24 @@
 unit: type {}
 
 
+methodDeclaration:
+	  PUBLIC type identifier "(" formals ")" "{" statement "}" { $$ = MethodDeclaration::Create($2, $3, $8, $5);}
+
+
+statement:
+	  ASSERT "(" exp ")" { Statement::CreateAssertion($3); }
+
+
+formals:
+	  type identifier {$$ = Formals::Create($1, $2);}
+
+
+localVariableDeclaration:
+	  variableDeclaration { $$ = $1; }
+
+
 variableDeclaration:
-	type identifier ";" {}
+	  type identifier ";" {$$ = VariableDeclaration::Create($1, $2);}
 
 
 type:

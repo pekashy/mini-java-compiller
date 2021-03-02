@@ -5,6 +5,7 @@
 class Expression;
 class Lvalue;
 class MethodInvocation;
+class VariableDeclaration;
 
 class Statement : public GrammarNode
 {
@@ -13,7 +14,7 @@ public:
 
     static Ptr CreateAssertion(const std::shared_ptr<Expression>& pExpression);
     // TODO: Implemet
-    //static Ptr CreateLocalVarDeclaration(const Identifier::Ptr& pIdent, const std::shared_ptr<Expression>& pExpr);
+    static Ptr CreateLocalVarDeclaration(const std::shared_ptr<Expression>& pDeclaration);
     static Ptr CreateInnerStatement(const Ptr& pStatement);
     static Ptr CreateIf(const std::shared_ptr<Expression>& pExpression, const Ptr& pStatement);
     static Ptr CreateIfElse(const std::shared_ptr<Expression>& pExpression, const Ptr& pIfStatement, const Ptr& pElseStatement);
