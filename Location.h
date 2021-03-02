@@ -4,6 +4,8 @@
 #include "FlexBisonOutput/parser.hh"
 
 
+
+
 class Location
 {
 public:
@@ -28,8 +30,28 @@ public:
     virtual stype MakeRParen() = 0;
     virtual stype MakeAssign() = 0;
     virtual stype MakeEnd() = 0;
+    virtual stype MakeThis() = 0;
+    virtual stype MakeDot() = 0;
+    virtual stype MakeComadot() = 0;
+    virtual stype MakeAssert() = 0;
+    virtual stype MakeLSParnt() = 0;
+    virtual stype MakeRSParent() = 0;
+    virtual stype MakeInt() = 0;
+    virtual stype MakeBoolean() = 0;
+    virtual stype MakeVoid() = 0;
+    virtual stype MakePublic() = 0;
+    virtual stype MakeLFparen() = 0;
+    virtual stype MakeRFParen() = 0;
+    virtual stype MakeIf() = 0;
+    virtual stype MakeElse() = 0;
+    virtual stype MakeWhile() = 0;
+    virtual stype MakePrint() = 0;
+    virtual stype MakeClass() = 0;
+    virtual stype MakeMain() = 0;
+
+
+
     virtual ~Location() = default;
 protected:
     Location() = default;
 };
-

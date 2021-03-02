@@ -24,7 +24,26 @@ namespace {
         stype MakeLParen() override;
         stype MakeRParen() override;
         stype MakeAssign() override;
+        stype MakeAssert() override;
         stype MakeEnd() override;
+        stype MakeThis() override;
+        stype MakeDot() override;
+        stype MakeComadot() override;
+        stype MakeLSParnt() override;
+        stype MakeRSParent() override;
+        stype MakeInt() override;
+        stype MakeBoolean() override;
+        stype MakeVoid() override;
+        stype MakePublic() override;
+        stype MakeLFparen() override;
+        stype MakeRFParen() override;
+        stype MakeIf() override;
+        stype MakeElse() override;
+        stype MakeWhile() override;
+        stype MakePrint() override;
+        stype MakeClass() override;
+        stype MakeMain() override;
+
     private:
         const bool m_bDebug;
         const std::string m_rFilename;
@@ -96,12 +115,84 @@ Location::stype LocationImpl::MakeAssign() {
     return parser::make_ASSIGN(m_loc);
 }
 
-void LocationImpl::Step() {
-    m_loc.step();
+Location::stype LocationImpl::MakeThis() {
+    return parser::make_THIS(m_loc);
+}
+
+Location::stype LocationImpl::MakeDot() {
+    return parser::make_DOT(m_loc);
+}
+
+Location::stype LocationImpl::MakeLSParnt() {
+    return parser::make_LSPAREN(m_loc);
+}
+
+Location::stype LocationImpl::MakeRSParent() {
+    return parser::make_RSPAREN(m_loc);
+}
+
+Location::stype LocationImpl::MakeComadot() {
+    return parser::make_COMADOT(m_loc);
+}
+
+Location::stype LocationImpl::MakeInt() {
+    return parser::make_INT(m_loc);
+}
+
+Location::stype LocationImpl::MakeBoolean() {
+    return parser::make_BOOLEAN(m_loc);
+}
+
+Location::stype LocationImpl::MakeVoid() {
+    return parser::make_VOID(m_loc);
+}
+
+Location::stype LocationImpl::MakePublic() {
+    return parser::make_PUBLIC(m_loc);
+}
+
+Location::stype LocationImpl::MakeLFparen() {
+    return parser::make_LFPARENT(m_loc);
+}
+
+Location::stype LocationImpl::MakeRFParen() {
+    return parser::make_RFPARENT(m_loc);
+}
+
+Location::stype LocationImpl::MakeAssert(){
+    return parser::make_ASSERT(m_loc);
+}
+
+Location::stype LocationImpl::MakeIf() {
+    return parser::make_IF(m_loc);
+}
+
+Location::stype LocationImpl::MakeElse() {
+    return parser::make_ELSE(m_loc);
+}
+
+Location::stype LocationImpl::MakeWhile() {
+    return parser::make_WHILE(m_loc);
+}
+
+Location::stype LocationImpl::MakePrint() {
+    return parser::make_PRINT(m_loc);
+}
+
+Location::stype LocationImpl::MakeClass() {
+    return parser::make_CLASS(m_loc);
+}
+
+Location::stype LocationImpl::MakeMain() {
+    return parser::make_MAIN(m_loc);
 }
 
 Location::stype LocationImpl::MakeEnd() {
     return parser::make_END(m_loc);
+}
+
+void LocationImpl::Step() {
+    m_loc.step();
 }
 
 void LocationImpl::ThrowError(const std::string& rErrorMsg)
