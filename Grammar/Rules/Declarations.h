@@ -51,7 +51,6 @@ protected:
 };
 
 
-
 class MethodDeclaration : public Declaration
 {
 public:

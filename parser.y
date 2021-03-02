@@ -29,6 +29,8 @@
     class Formals;
     class Statement;
     class MethodInvocation;
+    class MainClassDeclaration;
+    class MethodDeclaration;
 }
 
 %define parse.trace
@@ -92,6 +94,8 @@
     WHILE "while"
     PRINT "System.out.println"
     RETURN "return"
+    CLASS "class"
+    MAIN "public static void main()"
 ;
 
 
@@ -114,12 +118,30 @@
 %nterm <std::shared_ptr<MethodDeclaration>> methodDeclaration
 %nterm <std::shared_ptr<Statement>> statement
 %nterm <std::shared_ptr<MethodInvocation>> methodInvocation
+%nterm <std::shared_ptr<Declaration>> declaration
+%nterm <std::shared_ptr<ClassDeclaration>> classDeclaration
+%nterm <std::shared_ptr<MainClassDeclaration>> mainClass
+%nterm <std::shared_ptr<Program>> program
 
 
 %%
-%start unit;
+%start program;
 
-unit: type {}
+program:
+	  mainClass classDeclaration {$$ = Program::Create($1, $2); driver.SetProgram($$); }
+
+
+mainClass:
+	  CLASS identifier "{" MAIN "{" statement "}" "}" { $$ = MainClassDeclaration::Create($6, $2); }
+
+
+classDeclaration:
+	  CLASS identifier "{" declaration "}" { $$ = ClassDeclaration::Create($2, $4); }
+
+
+declaration:
+	  variableDeclaration { $$ = $1; }
+	| methodDeclaration { $$ = $1; }
 
 
 methodDeclaration:
@@ -181,8 +203,8 @@ methodInvocation:
 
 
 fieldInvocation:
-	  THIS "." identifier { $$ = SimpleFieldInvocation::Create($3); }
-	| THIS "." identifier "[" exp "]" { $$ = ArrFieldInvocation::Create($3, $5); }
+	  THIS "." identifier { $$ = FieldInvocation::Create($3); }
+	| THIS "." identifier "[" exp "]" { $$ = FieldInvocation::Create($3, $5); }
 
 
 %left "+" "-";
