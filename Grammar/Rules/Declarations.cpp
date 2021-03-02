@@ -1,4 +1,7 @@
 #include "Declarations.h"
+#include "Types.h"
+#include "Identifier.h"
+#include "Statement.h"
 
 
 Formals::Ptr Formals::Create(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)

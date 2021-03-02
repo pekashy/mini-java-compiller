@@ -1,4 +1,5 @@
 #include "Expression.h"
+#include "Identifier.h"
 
 #include <functional>
 #include <string>
@@ -19,10 +20,10 @@ namespace
 
     class IdentExpression: public Expression {
     public:
-        explicit IdentExpression(const std::string& rIdent)  noexcept;
+        explicit IdentExpression(const std::shared_ptr<Identifier>& pIdent)  noexcept;
         [[nodiscard]] int Eval() const noexcept override;
     private:
-        std::string m_rIdent;
+        Identifier::Ptr m_pIdent;
     };
 
     class NumberExpression: public Expression {
@@ -68,8 +69,8 @@ int ArythmExpression::Eval() const noexcept {
 }
 
 
-IdentExpression::IdentExpression(const std::string& rIdent) noexcept
-    : m_rIdent(rIdent)
+IdentExpression::IdentExpression(const std::shared_ptr<Identifier>& pIdent) noexcept
+    : m_pIdent(pIdent)
 {}
 
 
@@ -118,7 +119,7 @@ Expression::Ptr Expression::CreateNumberExpression(int nValue) noexcept
 }
 
 
-Expression::Ptr Expression::CreateIdentExpression(const std::string& rIdent) noexcept
+Expression::Ptr Expression::CreateIdentExpression(const std::shared_ptr<Identifier>& pIdent) noexcept
 {
-    return std::make_shared<IdentExpression>(rIdent);
+    return std::make_shared<IdentExpression>(pIdent);
 }

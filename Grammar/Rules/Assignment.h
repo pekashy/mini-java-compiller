@@ -1,17 +1,18 @@
 #pragma once
 
-#include "Expression.h"
 #include "../GrammarNode.h"
 
 #include <string>
 #include <memory>
 
+class Expression;
+
 class Assignment : public GrammarNode{
  public:
     using Ptr = std::shared_ptr<Assignment>;
-    static Ptr Create(const std::string& rVariable, const Expression::Ptr& pExpr);
+    static Ptr Create(const std::string& rVariable, const std::shared_ptr<Expression>& pExpr);
  private:
-    Assignment(const std::string& rVariable, const Expression::Ptr& pExpr);
+    Assignment(const std::string& rVariable, const std::shared_ptr<Expression>& pExpr);
     std::string m_rVar;
-    Expression::Ptr m_pExpression;
+    std::shared_ptr<Expression> m_pExpression;
 };

@@ -3,6 +3,7 @@
 #include "../GrammarNode.h"
 #include <memory>
 
+class Identifier;
 
 class Expression : public GrammarNode
 {
@@ -14,7 +15,7 @@ public:
     static Ptr CreateMulExpression(const Ptr& pE1, const Ptr& pE2);
     static Ptr CreateDivExpression(const Ptr& pE1, const Ptr& pE2);
     static Ptr CreateNumberExpression(int nValue) noexcept;
-    static Ptr CreateIdentExpression(const std::string& rIdent) noexcept;
+    static Ptr CreateIdentExpression(const std::shared_ptr<Identifier>& pIdent) noexcept;
 protected:
     Expression() = default;
 };

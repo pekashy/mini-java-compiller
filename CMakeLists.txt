@@ -35,7 +35,7 @@ add_executable(
         Grammar/Rules/Assignment.cpp
         Grammar/Rules/AssignmentList.cpp
         Scanner.h Location.cpp Location.h ScannerImpl.cpp
-        Program.h Program.cpp Grammar/Rules/Statement.cpp Grammar/Rules/Statement.h Grammar/Visitor.cpp
+        Grammar/Rules/Statement.cpp Grammar/Rules/Statement.h Grammar/Visitor.cpp
         Grammar/Visitor.h Grammar/GrammarNode.cpp Grammar/GrammarNode.h
         Grammar/Rules/Lvalue.cpp Grammar/Rules/Lvalue.h Grammar/Rules/Identifier.cpp Grammar/Rules/Identifier.h
         Grammar/Rules/Invocation.cpp Grammar/Rules/Invocation.h Grammar/Rules/Expression.cpp Grammar/Rules/Types.cpp Grammar/Rules/Types.h Grammar/Rules/Declarations.cpp Grammar/Rules/Declarations.h Grammar/Rules/Program.cpp Grammar/Rules/Program.h)

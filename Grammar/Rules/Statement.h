@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../GrammarNode.h"
-#include "Identifier.h"
 
 class Expression;
 class Lvalue;

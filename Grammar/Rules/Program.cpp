@@ -1,5 +1,8 @@
 #include "Program.h"
 
+#include "Identifier.h"
+#include "Statement.h"
+#include "Declarations.h"
 
 MainClassDeclaration::Ptr MainClassDeclaration::Create(const Statement::Ptr &pStatement,
     const Identifier::Ptr &pClassName)

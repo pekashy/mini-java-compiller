@@ -1,4 +1,7 @@
 #include "Assignment.h"
+#include "Expression.h"
+
+
 #include <iostream>
 
 Assignment::Assignment(const std::string& rVariable, const Expression::Ptr& pExpr)

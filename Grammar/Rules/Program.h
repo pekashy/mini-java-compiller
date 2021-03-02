@@ -1,16 +1,20 @@
 #pragma once
 
-#include "Declarations.h"
+#include "../GrammarNode.h"
+
+class Statement;
+class Identifier;
+class ClassDeclaration;
 
 class MainClassDeclaration : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<MainClassDeclaration>;
-    static Ptr Create(const Statement::Ptr& pStatement, const Identifier::Ptr& pClassName);
+    static Ptr Create(const std::shared_ptr<Statement>& pStatement, const std::shared_ptr<Identifier>& pClassName);
 private:
-    MainClassDeclaration(const Statement::Ptr& pMainClassStatement, const Identifier::Ptr& pMainClassName);
-    Statement::Ptr m_pMainClassStatement;
-    Identifier::Ptr m_pMainClassName;
+    MainClassDeclaration(const std::shared_ptr<Statement>& pMainClassStatement, const std::shared_ptr<Identifier>& pMainClassName);
+    std::shared_ptr<Statement> m_pMainClassStatement;
+    std::shared_ptr<Identifier> m_pMainClassName;
 };
 
 
@@ -19,9 +23,9 @@ class Program : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<Program>;
-    static Ptr Create(const MainClassDeclaration::Ptr& pMainClass, const ClassDeclaration::Ptr& pMainClassDeclaration);
+    static Ptr Create(const MainClassDeclaration::Ptr& pMainClass, const std::shared_ptr<ClassDeclaration>& pMainClassDeclaration);
 private:
-    Program(const MainClassDeclaration::Ptr& pMainClass, const ClassDeclaration::Ptr& pMainClassDeclaration);
+    Program(const MainClassDeclaration::Ptr& pMainClass, const std::shared_ptr<ClassDeclaration>& pMainClassDeclaration);
     MainClassDeclaration::Ptr m_pMainClass;
-    ClassDeclaration::Ptr m_pMainClassDeclaration;
+    std::shared_ptr<ClassDeclaration> m_pMainClassDeclaration;
 };

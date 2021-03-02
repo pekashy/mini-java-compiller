@@ -1,20 +1,21 @@
 #pragma once
 
 #include "../GrammarNode.h"
-#include "Types.h"
-#include "Identifier.h"
-#include "Statement.h"
+
+class Type;
+class Identifier;
+class Statement;
 
 // TODO: vector of statements and types
 class Formals : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<Formals>;
-    static Ptr Create(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier);
+    static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
 private:
-    Formals(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier);
-    Type::Ptr m_pType;
-    Identifier::Ptr m_pIdentifier;
+    Formals(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
+    std::shared_ptr<Type> m_pType;
+    std::shared_ptr<Identifier> m_pIdentifier;
 };
 
 
@@ -22,11 +23,11 @@ class Declaration : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<Declaration>;
-    static Ptr Create(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier);
+    static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
 protected:
-    Declaration(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier);
-    Type::Ptr m_pType;
-    Identifier::Ptr m_pIdentifier;
+    Declaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
+    std::shared_ptr<Type> m_pType;
+    std::shared_ptr<Identifier> m_pIdentifier;
 };
 
 
@@ -34,18 +35,18 @@ class ClassDeclaration : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<ClassDeclaration>;
-    static Ptr Create(const Identifier::Ptr& pClassId, const Identifier::Ptr& pParentClassId,
+    static Ptr Create(const std::shared_ptr<Identifier>& pClassId, const std::shared_ptr<Identifier>& pParentClassId,
         const Declaration::Ptr& pDeclaration);
-    static Ptr Create(const Identifier::Ptr& pClassId, const Declaration::Ptr& pDeclaration);
+    static Ptr Create(const std::shared_ptr<Identifier>& pClassId, const Declaration::Ptr& pDeclaration);
 protected:
-    ClassDeclaration(const Identifier::Ptr& pClassId, const Identifier::Ptr& pParentClassId,
+    ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const std::shared_ptr<Identifier>& pParentClassId,
                      const Declaration::Ptr& pDeclaration);
 
-    ClassDeclaration(const Identifier::Ptr& pClassId, const Declaration::Ptr& pDeclaration);
+    ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const Declaration::Ptr& pDeclaration);
 
-    Type::Ptr m_pType;
-    Identifier::Ptr m_pClassId;
-    Identifier::Ptr m_pParentClassId = nullptr;
+    std::shared_ptr<Type> m_pType;
+    std::shared_ptr<Identifier> m_pClassId;
+    std::shared_ptr<Identifier> m_pParentClassId = nullptr;
     Declaration::Ptr m_pClassDeclaration;
 };
 
@@ -55,12 +56,12 @@ class MethodDeclaration : public Declaration
 {
 public:
     using Ptr = std::shared_ptr<MethodDeclaration>;
-    static Ptr Create(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier,
-        const Statement::Ptr& pStatement, const Formals::Ptr& pFormals);
+    static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier,
+        const std::shared_ptr<Statement>& pStatement, const Formals::Ptr& pFormals);
 private:
-    MethodDeclaration(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier,
-                         const Statement::Ptr& pStatement, const Formals::Ptr& pFormals);
-    Statement::Ptr m_pStatement;
+    MethodDeclaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier,
+                         const std::shared_ptr<Statement>& pStatement, const Formals::Ptr& pFormals);
+    std::shared_ptr<Statement> m_pStatement;
     Formals::Ptr m_pFormals;
 };
 
@@ -69,7 +70,7 @@ class VariableDeclaration : public Declaration
 {
 public:
     using Ptr = std::shared_ptr<VariableDeclaration>;
-    static Ptr Create(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier);
+    static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
 private:
-    VariableDeclaration(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier);
+    VariableDeclaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
 };

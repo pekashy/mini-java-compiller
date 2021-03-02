@@ -1,5 +1,7 @@
 #include "Lvalue.h"
 #include "Invocation.h"
+#include "Identifier.h"
+#include "Expression.h"
 
 namespace
 {

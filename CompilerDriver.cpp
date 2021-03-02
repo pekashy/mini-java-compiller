@@ -1,6 +1,6 @@
 #include "CompilerDriver.h"
 #include "Location.h"
-#include "Program.h"
+#include "Grammar/Rules/Program.h"
 
 #include <fstream>
 
@@ -11,7 +11,7 @@ namespace
     public:
         CompilerDriverImpl(bool bTraceParsing, bool bTraceScanning, bool bDebugLocation);
         int Parse(const std::string& f) override;
-        void SetProgram(Program::Ptr pProgram) override;
+        void SetProgram(const Program::Ptr& pProgram) override;
     private:
         std::shared_ptr<Scanner> CreateScanner(const std::string& f);
         std::shared_ptr<yy::parser> CreateParser(const std::shared_ptr<Scanner>& shScanner);
@@ -65,7 +65,7 @@ int CompilerDriverImpl::Parse(const std::string& f)
 }
 
 
-void CompilerDriverImpl::SetProgram(std::shared_ptr<Program> pProgram) {
+void CompilerDriverImpl::SetProgram(const std::shared_ptr<Program>& pProgram) {
     m_pProgram = pProgram;
 }
 
