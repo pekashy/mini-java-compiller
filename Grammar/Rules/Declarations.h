@@ -6,16 +6,30 @@ class Type;
 class Identifier;
 class Statement;
 
+
 // TODO: vector of statements and types
+class Formal : public GrammarNode
+{
+public:
+    using Ptr = std::shared_ptr<Formal>;
+    static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
+private:
+    Formal(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
+    std::shared_ptr<Type> m_pType;
+    std::shared_ptr<Identifier> m_pIdentifier;
+};
+
+
 class Formals : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<Formals>;
-    static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
-private:
-    Formals(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
-    std::shared_ptr<Type> m_pType;
-    std::shared_ptr<Identifier> m_pIdentifier;
+    static Ptr Create(const Formals::Ptr& pLine, const Formal::Ptr& pContent);
+    static Ptr Create();
+protected:
+    Formals(const Formals::Ptr& pLine, const Formal::Ptr& pContent);
+    Formals::Ptr m_pNextContent;
+    Formal::Ptr m_pContent;
 };
 
 

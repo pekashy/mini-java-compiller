@@ -3,16 +3,44 @@
 #include "Identifier.h"
 #include "Statement.h"
 
-
-Formals::Ptr Formals::Create(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
+namespace
 {
-    return std::shared_ptr<Formals>(new Formals(pType, pIdentifier));
+    class EmptyFormals : public Formals
+    {
+    public:
+        EmptyFormals()
+        : Formals(nullptr, nullptr) {}
+
+        using Ptr = std::shared_ptr<EmptyFormals>;
+    };
+};
+
+Formal::Ptr Formal::Create(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
+{
+    return std::shared_ptr<Formal>(new Formal(pType, pIdentifier));
 }
 
 
-Formals::Formals(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
+Formal::Formal(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
     : m_pType(pType)
     , m_pIdentifier(pIdentifier)
+{}
+
+
+Formals::Ptr Formals::Create(const Formals::Ptr& pLine, const Formal::Ptr& pContent)
+{
+    return std::shared_ptr<Formals>(new Formals(pLine, pContent));
+}
+
+
+Formals::Ptr Formals::Create()
+{
+    return std::make_shared<EmptyFormals>();
+}
+
+Formals::Formals(const Formals::Ptr& pLine, const Formal::Ptr& pContent)
+    : m_pNextContent(pLine)
+    , m_pContent(pContent)
 {}
 
 

@@ -27,6 +27,7 @@
     class ArrayType;
     class Identifier;
     class Formals;
+    class Formal;
     class Statement;
     class MethodInvocation;
     class MainClassDeclaration;
@@ -116,6 +117,7 @@
 %nterm <std::shared_ptr<Type>> type
 %nterm <std::shared_ptr<Identifier>> typeIdentifier
 %nterm <std::shared_ptr<Formals>> formals
+%nterm <std::shared_ptr<Formal>> formal
 %nterm <std::shared_ptr<MethodDeclaration>> methodDeclaration
 %nterm <std::shared_ptr<Statement>> statement
 %nterm <std::shared_ptr<MethodInvocation>> methodInvocation
@@ -162,7 +164,11 @@ statement:
 	| methodInvocation ";" { $$ = Statement::CreateMethodInvoc($1);}
 
 formals:
-	  type identifier {$$ = Formals::Create($1, $2);}
+	  %empty { $$ = Formals::Create(); }
+	| formals formal { $$ = Formals::Create($1, $2); }
+
+formal:
+	  type identifier {$$ = Formal::Create($1, $2);}
 
 
 localVariableDeclaration:
@@ -210,6 +216,7 @@ fieldInvocation:
 
 %left "+" "-";
 %left "*" "/";
+
 
 
 exp:
