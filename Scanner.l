@@ -57,6 +57,11 @@ blank [ \t\r]
 "class"    return m_pLocation->MakeClass();
 "main"     return m_pLocation->MakeMain();
 "static"     return m_pLocation->MakeStatic();
+"new"     return m_pLocation->MakeNew();
+"true"     return m_pLocation->MakeTrue();
+"false"     return m_pLocation->MakeFalse();
+"length"     return m_pLocation->MakeLength();
+"length"     return m_pLocation->MakeLength();
 {int}      return m_pLocation->MakeNumber(yytext);
 {id}       return m_pLocation->MakeIdentifier(yytext);
 .          m_pLocation->ThrowError("invalid character: " + std::string(yytext));

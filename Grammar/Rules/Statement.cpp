@@ -89,7 +89,7 @@ namespace
         explicit PrintStatement(const Expression::Ptr& pExpression)
             : m_pExpr(pExpression)
         {
-            std::cout << "Ready to print: " << m_pExpr->Eval() << std::endl;
+            //std::cout << "Ready to print: " << m_pExpr->Eval() << std::endl;
         }
     private:
         Expression::Ptr m_pExpr;

@@ -49,8 +49,11 @@ public:
     virtual stype MakeClass() = 0;
     virtual stype MakeMain() = 0;
     virtual stype MakeStatic() = 0;
-
-
+    virtual stype MakeNew()  = 0;
+    virtual stype MakeTrue()  = 0;
+    virtual stype MakeFalse()  = 0;
+    virtual stype MakeLength()  = 0;
+    virtual stype MakeInverse()  = 0;
 
     virtual ~Location() = default;
 protected:

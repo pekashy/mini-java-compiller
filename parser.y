@@ -12,6 +12,7 @@
     class Assignment;
     class AssignmentList;
     class Expression;
+    class BooleanExpression;
     class GrammarNode;
     class Location;
     class Scanner;
@@ -80,6 +81,7 @@
     RPAREN ")"
     THIS "this"
     DOT "."
+    INVERSE "!"
     LSPAREN "["
     RSPAREN "]"
     COMADOT ";"
@@ -98,6 +100,10 @@
     CLASS "class"
     STATIC "static"
     MAIN "main"
+    NEW "new"
+    TRUE "true"
+    FALSE "false"
+    LENGTH "length"
 ;
 
 
@@ -217,16 +223,23 @@ fieldInvocation:
 %left "+" "-";
 %left "*" "/";
 
-
-
 exp:
-    "number" {$$ = Expression::CreateNumberExpression($1);  }
+    "number" {$$ = ArythmExpression::CreateNumberExpression($1);  }
     | identifier {$$ = Expression::CreateIdentExpression($1);  }
-    | exp "+" exp { $$ = Expression::CreateAddExpression($1, $3);  }
-    | exp "-" exp { $$ = Expression::CreateSubstractExpression($1, $3);  }
-    | exp "*" exp { $$ = Expression::CreateMulExpression($1, $3);  }
-    | exp "/" exp { $$ = Expression::CreateDivExpression($1, $3); }
-    | "(" exp ")" { $$ = $2; };
+    | exp "+" exp { $$ = ArythmExpression::CreateAddExpression($1, $3);  }
+    | exp "-" exp { $$ = ArythmExpression::CreateSubstractExpression($1, $3);  }
+    | exp "*" exp { $$ = ArythmExpression::CreateMulExpression($1, $3);  }
+    | exp "/" exp { $$ = ArythmExpression::CreateDivExpression($1, $3); }
+    | "(" exp ")" { $$ = $2; }
+    | exp "." LENGTH { $$ = Expression::CreateLengthExpression($1); }
+    | NEW simpleType "[" exp "]" { $$ = Expression::CreateStackVarCreationExpression($2, $4); }
+    | NEW identifier "(" ")" { $$ = Expression::CreateHeapVarCreationExpression($2); }
+    | "!" exp { $$ = BooleanExpression::CreateInverseExpression($2); }
+    | TRUE { $$ = BooleanExpression::CreateBoolExpression(true); }
+    | FALSE { $$ = BooleanExpression::CreateBoolExpression(false); }
+    | methodInvocation { $$ = Expression::CreateMethodInvocationExpression($1); }
+    | fieldInvocation { $$ = Expression::CreateFieldInvocationExpression($1); }
+    ;
 
 
 identifier:

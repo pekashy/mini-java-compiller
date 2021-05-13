@@ -44,6 +44,11 @@ namespace {
         stype MakeClass() override;
         stype MakeMain() override;
         stype MakeStatic() override;
+        stype MakeNew() override;
+        stype MakeTrue() override;
+        stype MakeFalse() override;
+        stype MakeLength() override;
+        stype MakeInverse() override;
 
     private:
         const bool m_bDebug;
@@ -195,6 +200,30 @@ Location::stype LocationImpl::MakeStatic() {
 Location::stype LocationImpl::MakeEnd() {
     return parser::make_END(m_loc);
 }
+
+Location::stype LocationImpl::MakeNew() {
+    return parser::make_NEW(m_loc);
+}
+
+Location::stype LocationImpl::MakeTrue() {
+    return parser::make_TRUE(m_loc);
+}
+
+Location::stype LocationImpl::MakeFalse()
+{
+    return parser::make_FALSE(m_loc);
+}
+
+Location::stype LocationImpl::MakeLength()
+{
+    return parser::make_LENGTH(m_loc);
+}
+
+Location::stype LocationImpl::MakeInverse()
+{
+    return parser::make_INVERSE(m_loc);
+}
+
 
 void LocationImpl::Step() {
     m_loc.step();
