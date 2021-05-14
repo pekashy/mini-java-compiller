@@ -4,7 +4,7 @@ project(MiniJava)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
-
+file(MAKE_DIRECTORY FlexBisonOutput)
 set(
         HEADERS
         CompilerDriver.h
