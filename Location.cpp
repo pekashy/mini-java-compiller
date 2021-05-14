@@ -49,7 +49,11 @@ namespace {
         stype MakeFalse() override;
         stype MakeLength() override;
         stype MakeInverse() override;
-
+        stype MakeLess() override;
+        stype MakeMore() override;
+        stype MakeLeq() override;
+        stype MakeMeq() override;
+        stype MakeEq() override;
     private:
         const bool m_bDebug;
         const std::string m_rFilename;
@@ -223,6 +227,32 @@ Location::stype LocationImpl::MakeInverse()
 {
     return parser::make_INVERSE(m_loc);
 }
+
+Location::stype LocationImpl::MakeLess()
+{
+    return parser::make_LESS(m_loc);
+}
+
+Location::stype LocationImpl::MakeMore()
+{
+    return parser::make_MORE(m_loc);
+}
+
+Location::stype LocationImpl::MakeLeq()
+{
+    return parser::make_LEQ(m_loc);
+}
+
+Location::stype LocationImpl::MakeMeq()
+{
+    return parser::make_MEQ(m_loc);
+}
+
+Location::stype LocationImpl::MakeEq()
+{
+    return parser::make_EQ(m_loc);
+}
+
 
 
 void LocationImpl::Step() {

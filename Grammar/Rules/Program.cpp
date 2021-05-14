@@ -20,13 +20,13 @@ MainClassDeclaration::MainClassDeclaration(const Statement::Ptr &pStatement, con
 
 
 Program::Ptr Program::Create(const MainClassDeclaration::Ptr &pMainClass,
-    const ClassDeclaration::Ptr &pMainClassDeclaration)
+                             const Chain<ClassDeclaration>::Ptr& pClassDeclarations)
 {
-    return std::shared_ptr<Program>(new Program(pMainClass, pMainClassDeclaration));
+    return std::shared_ptr<Program>(new Program(pMainClass, pClassDeclarations));
 }
 
 
-Program::Program(const MainClassDeclaration::Ptr &pMainClass, const ClassDeclaration::Ptr &pMainClassDeclaration)
+Program::Program(const MainClassDeclaration::Ptr &pMainClass, const Chain<ClassDeclaration>::Ptr& pClassDeclarations)
     : m_pMainClass(pMainClass)
-    , m_pMainClassDeclaration(pMainClassDeclaration)
+    , m_pMainClassDeclaration(pClassDeclarations)
 {}

@@ -58,19 +58,19 @@ Declaration::Declaration(const Type::Ptr &pType, const Identifier::Ptr &pIdentif
 
 MethodDeclaration::Ptr MethodDeclaration::Create(const Type::Ptr &pType,
                           const Identifier::Ptr &pIdentifier,
-                          const Statement::Ptr &pStatement,
+                          const Chain<Statement>::Ptr& pStatements,
                           const Formals::Ptr &pFormals)
 {
-    return std::shared_ptr<MethodDeclaration>(new MethodDeclaration(pType, pIdentifier, pStatement, pFormals));
+    return std::shared_ptr<MethodDeclaration>(new MethodDeclaration(pType, pIdentifier, pStatements, pFormals));
 }
 
 
 MethodDeclaration::MethodDeclaration(const Type::Ptr &pType,
                                      const Identifier::Ptr &pIdentifier,
-                                     const Statement::Ptr &pStatement,
+                                     const Chain<Statement>::Ptr& pStatements,
                                      const Formals::Ptr &pFormals)
                                      : Declaration(pType, pIdentifier)
-                                     , m_pStatement(pStatement)
+                                     , m_pStatements(pStatements)
                                      , m_pFormals(pFormals)
 {}
 
@@ -95,16 +95,16 @@ ClassDeclaration::Ptr ClassDeclaration::Create(const Identifier::Ptr &pClassId,
 
 
 ClassDeclaration::Ptr ClassDeclaration::Create(const Identifier::Ptr &pClassId,
-                                               const Declaration::Ptr &pDeclaration)
+                                               const Chain<Declaration>::Ptr& pDeclarations)
 {
-    return std::shared_ptr<ClassDeclaration>(new ClassDeclaration(pClassId, pDeclaration));
+    return std::shared_ptr<ClassDeclaration>(new ClassDeclaration(pClassId, pDeclarations));
 }
 
 
 
 ClassDeclaration::ClassDeclaration(const Identifier::Ptr &pClassId,
                                    const Identifier::Ptr &pParentClassId,
-                                   const Declaration::Ptr &pDeclaration)
+                                   const Declaration::Ptr& pDeclaration)
                                    : m_pClassId(pClassId)
                                    , m_pParentClassId(pParentClassId)
                                    , m_pClassDeclaration(pDeclaration)
@@ -112,7 +112,7 @@ ClassDeclaration::ClassDeclaration(const Identifier::Ptr &pClassId,
 
 
 ClassDeclaration::ClassDeclaration(const Identifier::Ptr &pClassId,
-                                   const Declaration::Ptr &pDeclaration)
+                                   const Chain<Declaration>::Ptr &pDeclarations)
                                     : m_pClassId(pClassId)
-                                    , m_pClassDeclaration(pDeclaration)
+                                    , m_pClassDeclarations(pDeclarations)
 {}

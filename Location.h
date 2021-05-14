@@ -54,7 +54,11 @@ public:
     virtual stype MakeFalse()  = 0;
     virtual stype MakeLength()  = 0;
     virtual stype MakeInverse()  = 0;
-
+    virtual stype MakeLess()  = 0;
+    virtual stype MakeMore()  = 0;
+    virtual stype MakeLeq()  = 0;
+    virtual stype MakeMeq()  = 0;
+    virtual stype MakeEq()  = 0;
     virtual ~Location() = default;
 protected:
     Location() = default;

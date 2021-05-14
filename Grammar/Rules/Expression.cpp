@@ -26,7 +26,13 @@ namespace
         Identifier::Ptr m_pIdent;
     };
 
-    class NumberExpression: public ArythmExpression {
+    class ThisExpression: public Expression {
+    public:
+        explicit ThisExpression()  noexcept = default;
+    };
+
+
+class NumberExpression: public ArythmExpression {
     public:
         explicit NumberExpression(int value) noexcept;
         int Eval() const noexcept override;
@@ -130,7 +136,29 @@ namespace
     };
 
 
-    class InverseBooleanExpression: public BooleanExpression {
+    class ComplexBooleanExpression: public BooleanExpression {
+    public:
+        explicit ComplexBooleanExpression(const Expression::Ptr& pExpression1, std::string action,
+                                          const Expression::Ptr& pExpression2) noexcept
+            : m_pExpression1(pExpression1)
+            , m_pExpression2(m_pExpression2)
+            , m_action(action)
+        {}
+
+        [[nodiscard]] bool Eval() const noexcept override
+        {
+            return false; // TODO : implement;
+        }
+
+    private:
+        std::string m_action;
+        Expression::Ptr m_pExpression1;
+        Expression::Ptr m_pExpression2;
+
+    };
+
+
+class InverseBooleanExpression: public BooleanExpression {
     public:
         explicit InverseBooleanExpression(const Expression::Ptr& pExpr)
             : m_pExpression(std::dynamic_pointer_cast<BooleanExpression>(pExpr))
@@ -268,4 +296,16 @@ BooleanExpression::Ptr BooleanExpression::CreateInverseExpression(const Expressi
 BooleanExpression::Ptr BooleanExpression::CreateBoolExpression(bool bValue) noexcept
 {
     return std::make_shared<SimpleBooleanExpression>(bValue);
+}
+
+BooleanExpression::Ptr BooleanExpression::CreateComparasmentExpression(const Expression::Ptr& pExpression1,
+                                                                       std::string action,
+                                                                       const Expression::Ptr& pExpression2)
+{
+    return std::make_shared<ComplexBooleanExpression>(pExpression1, action, pExpression2);
+}
+
+Expression::Ptr Expression::CreateThisExpression() noexcept
+{
+    return std::make_shared<ThisExpression>();
 }

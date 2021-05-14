@@ -33,6 +33,8 @@
     class MethodInvocation;
     class MainClassDeclaration;
     class MethodDeclaration;
+    template<class T>
+    class Chain;
 }
 
 %define parse.trace
@@ -104,6 +106,11 @@
     TRUE "true"
     FALSE "false"
     LENGTH "length"
+    LESS "<"
+    MORE ">"
+    LEQ "<="
+    MEQ ">="
+    EQ "=="
 ;
 
 
@@ -111,9 +118,6 @@
 %token <int> NUMBER "number"
 %nterm <std::shared_ptr<Identifier>> identifier
 %nterm <std::shared_ptr<Expression>> exp
-%nterm <std::shared_ptr<Assignment>> assignment
-%nterm <std::shared_ptr<AssignmentList>> assignments
-%nterm <std::shared_ptr<Program>> unit
 %nterm <std::shared_ptr<Lvalue>> lvalue
 %nterm <std::shared_ptr<FieldInvocation>> fieldInvocation
 %nterm <std::shared_ptr<VariableDeclaration>> variableDeclaration
@@ -121,7 +125,6 @@
 %nterm <std::shared_ptr<SimpleType>> simpleType
 %nterm <std::shared_ptr<ArrayType>> arrayType
 %nterm <std::shared_ptr<Type>> type
-%nterm <std::shared_ptr<Identifier>> typeIdentifier
 %nterm <std::shared_ptr<Formals>> formals
 %nterm <std::shared_ptr<Formal>> formal
 %nterm <std::shared_ptr<MethodDeclaration>> methodDeclaration
@@ -131,13 +134,16 @@
 %nterm <std::shared_ptr<ClassDeclaration>> classDeclaration
 %nterm <std::shared_ptr<MainClassDeclaration>> mainClass
 %nterm <std::shared_ptr<Program>> program
+%nterm <std::shared_ptr<Chain<ClassDeclaration>>> classDeclarations
+%nterm <std::shared_ptr<Chain<Declaration>>> declarations
+%nterm <std::shared_ptr<Chain<Statement>>> statements
 
 
 %%
 %start program;
 
 program:
-	  mainClass classDeclaration {$$ = Program::Create($1, $2); driver.SetProgram($$); }
+	  mainClass classDeclarations {$$ = Program::Create($1, $2); driver.SetProgram($$); }
 
 
 mainClass:
@@ -145,20 +151,28 @@ mainClass:
 
 
 classDeclaration:
-	  CLASS identifier "{" declaration "}" { $$ = ClassDeclaration::Create($2, $4); }
+	  CLASS identifier "{" declarations "}" { $$ = ClassDeclaration::Create($2, $4); }
+
+
+classDeclarations:
+	    %empty { $$ = Chain<ClassDeclaration>::Create(); }
+	  | classDeclarations classDeclaration { $$ = Chain<ClassDeclaration>::Create($1, $2); }
 
 
 declaration:
-	  variableDeclaration { $$ = $1; }
-	| methodDeclaration { $$ = $1; }
+	  variableDeclaration { $$ = $1; } | methodDeclaration { $$ = $1; }
+
+declarations:
+	    %empty { $$ = Chain<Declaration>::Create(); }
+	  | declarations declaration { $$ = Chain<Declaration>::Create($1, $2); }
 
 
 methodDeclaration:
-	  PUBLIC type identifier "(" formals ")" "{" statement "}" { $$ = MethodDeclaration::Create($2, $3, $8, $5);}
+	  PUBLIC type identifier "(" formals ")" "{" statements "}" { $$ = MethodDeclaration::Create($2, $3, $8, $5);}
 
 
 statement:
-	  ASSERT "(" exp ")" { $$ = Statement::CreateAssertion($3); }
+	  ASSERT "(" exp ")" ";" { $$ = Statement::CreateAssertion($3); }
 	| localVariableDeclaration { $$ = Statement::CreateLocalVarDeclaration($1);}
 	| "{" statement "}" { $$ = Statement::CreateInnerStatement($2);}
 	| IF "(" exp ")" statement { $$ = Statement::CreateIf($3, $5);}
@@ -168,6 +182,12 @@ statement:
 	| lvalue "=" exp ";" { $$ = Statement::CreateAssignment($3, $1);}
 	| RETURN exp ";" { $$ = Statement::CreateReturn($2);}
 	| methodInvocation ";" { $$ = Statement::CreateMethodInvoc($1);}
+
+
+statements:
+	    %empty { $$ = Chain<Statement>::Create(); }
+	  | statements statement  { $$ = Chain<Statement>::Create($1, $2); }
+
 
 formals:
 	  %empty { $$ = Formals::Create(); }
@@ -200,11 +220,6 @@ simpleType:
 	| "void" { $$ = SimpleType::Create(Types::Void); }
 	| identifier { $$ = SimpleType::Create($1); }
 
-
-typeIdentifier:
-	  identifier { $$ = $1; }
-
-
 lvalue:
 	  identifier { $$ = Lvalue::Create($1); }
 	| identifier "[" exp "]" { $$ = Lvalue::Create($1, $3);}
@@ -213,7 +228,7 @@ lvalue:
 
 methodInvocation:
 	  exp "." identifier "(" exp ")" {$$ = MethodInvocation::Create($1, $3, $5);}
-
+	| THIS "." identifier "(" exp ")" {$$ = MethodInvocation::Create(Expression::CreateThisExpression(), $3, $5);}
 
 fieldInvocation:
 	  THIS "." identifier { $$ = FieldInvocation::Create($3); }
@@ -230,10 +245,16 @@ exp:
     | exp "-" exp { $$ = ArythmExpression::CreateSubstractExpression($1, $3);  }
     | exp "*" exp { $$ = ArythmExpression::CreateMulExpression($1, $3);  }
     | exp "/" exp { $$ = ArythmExpression::CreateDivExpression($1, $3); }
+    | exp "<" exp { $$ = BooleanExpression::CreateComparasmentExpression($1, "<", $3); }
+    | exp ">" exp { $$ = BooleanExpression::CreateComparasmentExpression($1, ">", $3); }
+    | exp "<=" exp { $$ = BooleanExpression::CreateComparasmentExpression($1, "<=", $3); }
+    | exp ">=" exp { $$ = BooleanExpression::CreateComparasmentExpression($1, ">=", $3); }
+    | exp EQ exp { $$ = BooleanExpression::CreateComparasmentExpression($1, "==", $3); }
     | "(" exp ")" { $$ = $2; }
     | exp "." LENGTH { $$ = Expression::CreateLengthExpression($1); }
     | NEW simpleType "[" exp "]" { $$ = Expression::CreateStackVarCreationExpression($2, $4); }
     | NEW identifier "(" ")" { $$ = Expression::CreateHeapVarCreationExpression($2); }
+    | THIS { $$ = Expression::CreateThisExpression(); }
     | "!" exp { $$ = BooleanExpression::CreateInverseExpression($2); }
     | TRUE { $$ = BooleanExpression::CreateBoolExpression(true); }
     | FALSE { $$ = BooleanExpression::CreateBoolExpression(false); }

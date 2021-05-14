@@ -23,9 +23,9 @@ class Program : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<Program>;
-    static Ptr Create(const MainClassDeclaration::Ptr& pMainClass, const std::shared_ptr<ClassDeclaration>& pMainClassDeclaration);
+    static Ptr Create(const MainClassDeclaration::Ptr& pMainClass, const Chain<ClassDeclaration>::Ptr& pClassDeclarations);
 private:
-    Program(const MainClassDeclaration::Ptr& pMainClass, const std::shared_ptr<ClassDeclaration>& pMainClassDeclaration);
+    Program(const MainClassDeclaration::Ptr& pMainClass, const Chain<ClassDeclaration>::Ptr& pClassDeclarations);
     MainClassDeclaration::Ptr m_pMainClass;
-    std::shared_ptr<ClassDeclaration> m_pMainClassDeclaration;
+    const Chain<ClassDeclaration>::Ptr m_pMainClassDeclaration;
 };

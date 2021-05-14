@@ -4,7 +4,6 @@
 
 
 int main(int argc, char** argv) {
-    int result = 0;
     bool bTraceParsing = false;
     bool bTraceScanning = false;
     bool bLocationDebug = false;

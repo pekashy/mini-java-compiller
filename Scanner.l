@@ -16,7 +16,7 @@
 %option yyclass="Scanner"
 
 id    [a-zA-Z][a-zA-Z_0-9]*
-int   [0-9]+
+int   -?[0-9]+
 blank [ \t\r]
 
 %{
@@ -61,7 +61,11 @@ blank [ \t\r]
 "true"     return m_pLocation->MakeTrue();
 "false"     return m_pLocation->MakeFalse();
 "length"     return m_pLocation->MakeLength();
-"length"     return m_pLocation->MakeLength();
+"<"	return m_pLocation->MakeLess();
+">"	return m_pLocation->MakeMore();
+"<="	return m_pLocation->MakeLeq();
+">="	return m_pLocation->MakeMeq();
+"=="	return m_pLocation->MakeEq();
 {int}      return m_pLocation->MakeNumber(yytext);
 {id}       return m_pLocation->MakeIdentifier(yytext);
 .          m_pLocation->ThrowError("invalid character: " + std::string(yytext));

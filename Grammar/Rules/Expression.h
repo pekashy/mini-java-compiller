@@ -14,6 +14,7 @@ class Expression : public GrammarNode
 public:
     using Ptr = std::shared_ptr<Expression>;
     static Ptr CreateIdentExpression(const std::shared_ptr<Identifier>& pIdent) noexcept;
+    static Ptr CreateThisExpression() noexcept;
     static Ptr CreateLengthExpression(const Ptr& pExpression) noexcept;
     static Ptr CreateStackVarCreationExpression(const std::shared_ptr<SimpleType> pType, const Ptr& pExpr) noexcept;
     static Ptr CreateHeapVarCreationExpression(const std::shared_ptr<Identifier>& pIdent) noexcept;
@@ -48,5 +49,7 @@ public:
     virtual bool Eval() const = 0;
 
     static Ptr CreateInverseExpression(const Expression::Ptr& pExpression);
+    static Ptr CreateComparasmentExpression(const Expression::Ptr& pExpression1, std::string action,
+                                            const Expression::Ptr& pExpression2);
     static Ptr CreateBoolExpression(bool bValue) noexcept;
 };

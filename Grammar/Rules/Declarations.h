@@ -51,17 +51,18 @@ public:
     using Ptr = std::shared_ptr<ClassDeclaration>;
     static Ptr Create(const std::shared_ptr<Identifier>& pClassId, const std::shared_ptr<Identifier>& pParentClassId,
         const Declaration::Ptr& pDeclaration);
-    static Ptr Create(const std::shared_ptr<Identifier>& pClassId, const Declaration::Ptr& pDeclaration);
+    static Ptr Create(const std::shared_ptr<Identifier>& pClassId, const Chain<Declaration>::Ptr& pDeclarations);
 protected:
     ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const std::shared_ptr<Identifier>& pParentClassId,
                      const Declaration::Ptr& pDeclaration);
 
-    ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const Declaration::Ptr& pDeclaration);
+    ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const Chain<Declaration>::Ptr& pDeclarations);
 
     std::shared_ptr<Type> m_pType;
     std::shared_ptr<Identifier> m_pClassId;
     std::shared_ptr<Identifier> m_pParentClassId = nullptr;
     Declaration::Ptr m_pClassDeclaration;
+    const Chain<Declaration>::Ptr m_pClassDeclarations;
 };
 
 
@@ -70,11 +71,11 @@ class MethodDeclaration : public Declaration
 public:
     using Ptr = std::shared_ptr<MethodDeclaration>;
     static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier,
-        const std::shared_ptr<Statement>& pStatement, const Formals::Ptr& pFormals);
+                      const Chain<Statement>::Ptr& pStatements, const Formals::Ptr& pFormals);
 private:
     MethodDeclaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier,
-                         const std::shared_ptr<Statement>& pStatement, const Formals::Ptr& pFormals);
-    std::shared_ptr<Statement> m_pStatement;
+                         const Chain<Statement>::Ptr& pStatements, const Formals::Ptr& pFormals);
+    const Chain<Statement>::Ptr& m_pStatements;
     Formals::Ptr m_pFormals;
 };
 
