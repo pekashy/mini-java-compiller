@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Invocation.h"
 #include "Expression.h"
 #include "Identifier.h"
@@ -10,9 +11,17 @@ namespace
         explicit SimpleFieldInvocation(const Identifier::Ptr& pIdent)
         : m_pIdent(pIdent)
         {}
+
+        void Accept(PrintVisitor::Ptr visitor) override
+        {
+            std::cout << "Simple Field Invocation Visited" << std::endl;
+            m_pIdent->Accept(visitor);
+        }
+
     private:
         Identifier::Ptr m_pIdent;
     };
+
 
     class ArrFieldInvocation : public FieldInvocation
     {
@@ -21,10 +30,19 @@ namespace
         : m_pIdent(pIdent)
         , m_pExpression(pExpr)
         {}
+
+
+        void Accept(PrintVisitor::Ptr visitor) override
+        {
+            std::cout << "Arr Field Invocation Visited" << std::endl;
+            m_pExpression->Accept(visitor);
+            m_pIdent->Accept(visitor);
+        }
     private:
         Identifier::Ptr m_pIdent;
         Expression::Ptr m_pExpression;
     };
+
 
     class MethodInvocationImpl : public MethodInvocation
     {
@@ -35,6 +53,14 @@ namespace
             , m_pIdent(pIdent)
             , m_pArgExpression(pArgExpr)
         {}
+
+        void Accept(PrintVisitor::Ptr visitor) override
+        {
+            std::cout << "Method Invocation Visited" << std::endl;
+            m_pArgExpression->Accept(visitor);
+            m_pIdent->Accept(visitor);
+            m_pCalleeExpression->Accept(visitor);
+        }
 
     private:
         Expression::Ptr m_pCalleeExpression;
@@ -54,7 +80,6 @@ FieldInvocation::Ptr FieldInvocation::Create(const Identifier::Ptr& pIdent, cons
 {
     return std::make_shared<ArrFieldInvocation>(pIdent, pExpr);
 }
-
 
 MethodInvocation::Ptr MethodInvocation::Create(const std::shared_ptr<Expression>& caleeExpr,
     const std::shared_ptr<Identifier>& pIdent, const std::shared_ptr<Expression>& pArg)

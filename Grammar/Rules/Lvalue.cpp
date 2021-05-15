@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Lvalue.h"
 #include "Invocation.h"
 #include "Identifier.h"
@@ -11,17 +12,33 @@ namespace
         IdentifierLvalue(const Identifier::Ptr& pIdent)
         : m_pIdentifier(pIdent)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Identifier Lvalue Visited" << std::endl;
+            m_pIdentifier->Accept(pVisitor);
+        }
+
     private:
         Identifier::Ptr m_pIdentifier;
     };
 
-    class EpressionLvalue : public Lvalue
+    class ExpressionLvalue : public Lvalue
     {
     public:
-        EpressionLvalue(const Identifier::Ptr& pIdent, const Expression::Ptr& pExpression)
+        ExpressionLvalue(const Identifier::Ptr& pIdent, const Expression::Ptr& pExpression)
             : m_pIdentifier(pIdent)
             , m_pExpression(pExpression)
         {}
+
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Expression Lvalue Visited" << std::endl;
+            m_pIdentifier->Accept(pVisitor);
+            m_pExpression->Accept(pVisitor);
+        }
+
     private:
         Identifier::Ptr m_pIdentifier;
         Expression::Ptr m_pExpression;
@@ -34,6 +51,12 @@ namespace
         FieldLvalue(const FieldInvocation::Ptr& pInvoc)
             : m_pInvocation(pInvoc)
         {}
+
+        void Accept(PrintVisitor::Ptr visitor) override
+        {
+            std::cout << "Field Lvalue Visited" << std::endl;
+            m_pInvocation->Accept(visitor);
+        }
     private:
         FieldInvocation::Ptr m_pInvocation;
     };
@@ -48,7 +71,7 @@ Lvalue::Ptr Lvalue::Create(const Identifier::Ptr& pIdent)
 
 Lvalue::Ptr Lvalue::Create(const Identifier::Ptr& pIdent, const Expression::Ptr& pExpr)
 {
-    return std::make_shared<EpressionLvalue>(pIdent, pExpr);
+    return std::make_shared<ExpressionLvalue>(pIdent, pExpr);
 }
 
 

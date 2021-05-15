@@ -13,6 +13,7 @@ public:
     static Ptr Create(const std::shared_ptr<Identifier>& pIdent);
     static Ptr Create(const std::shared_ptr<Identifier>& pIdent, const std::shared_ptr<Expression>& pExpr);
     static Ptr Create(const std::shared_ptr<FieldInvocation>& pFieldInvoc);
+    virtual ~Lvalue() = default;
 protected:
     Lvalue() = default;
 };

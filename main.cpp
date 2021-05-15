@@ -1,5 +1,5 @@
 #include "CompilerDriver.h"
-
+#include "Grammar/Visitor.h"
 #include <iostream>
 
 
@@ -22,5 +22,7 @@ int main(int argc, char** argv) {
     }
 
     auto pDriver = CompilerDriver::Create(bTraceParsing, bTraceScanning, bLocationDebug);
-    return pDriver->Parse(rParseString);
+    std::cout << "Scanning&Parsing result: " << !pDriver->Parse(rParseString) << std::endl;
+    auto printVisitor = PrintVisitor::Create();
+    pDriver->StartVisitor(printVisitor);
 }

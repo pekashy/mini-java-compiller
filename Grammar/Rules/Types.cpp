@@ -1,15 +1,12 @@
+#include <iostream>
 #include "Types.h"
 #include "Identifier.h"
-
-Type::Ptr Type::Create(const Type::Ptr& pType)
-{
-    return std::shared_ptr<Type>(new Type(pType));
-}
 
 
 Type::Type(const Type::Ptr& pType)
     : m_pAssociatedType(pType)
 {}
+
 
 SimpleType::Ptr SimpleType::Create(Types m_eIdentKW)
 {
@@ -33,6 +30,16 @@ SimpleType::SimpleType(const Identifier::Ptr& pIdentifier)
 {}
 
 
+void SimpleType::Accept(PrintVisitor::Ptr visitor)
+{
+    std::cout << "SimpleType '" << static_cast<int>(m_eIdentKW) << "' Visited" << std::endl;
+    if(m_pIdentifier)
+    {
+        m_pIdentifier->Accept(visitor);
+    }
+}
+
+
 ArrayType::Ptr ArrayType::Create(const SimpleType::Ptr& pType)
 {
     return std::shared_ptr<ArrayType>(new ArrayType(pType));
@@ -42,3 +49,13 @@ ArrayType::Ptr ArrayType::Create(const SimpleType::Ptr& pType)
 ArrayType::ArrayType(const SimpleType::Ptr& pType)
     : Type(pType)
 {}
+
+
+void ArrayType::Accept(PrintVisitor::Ptr visitor)
+{
+    std::cout << "ArrayType Visited" << std::endl;
+    if(m_pAssociatedType)
+    {
+        m_pAssociatedType->Accept(visitor);
+    }
+}

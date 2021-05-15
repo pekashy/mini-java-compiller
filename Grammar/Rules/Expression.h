@@ -21,6 +21,7 @@ public:
     static Ptr CreateMethodInvocationExpression(const std::shared_ptr<MethodInvocation>& pInvoc) noexcept;
     static Ptr CreateFieldInvocationExpression(const std::shared_ptr<FieldInvocation>& pInvoc) noexcept;
 
+    virtual ~Expression() = default;
 protected:
     Expression() = default;
 };
@@ -38,6 +39,8 @@ public:
     static Ptr CreateMulExpression(const Expression::Ptr& pE1, const Expression::Ptr& pE2);
     static Ptr CreateDivExpression(const Expression::Ptr& pE1, const Expression::Ptr& pE2);
     static Ptr CreateNumberExpression(int nValue) noexcept;
+
+    virtual ~ArythmExpression() = default;
 };
 
 
@@ -52,4 +55,6 @@ public:
     static Ptr CreateComparasmentExpression(const Expression::Ptr& pExpression1, std::string action,
                                             const Expression::Ptr& pExpression2);
     static Ptr CreateBoolExpression(bool bValue) noexcept;
+
+    virtual ~BooleanExpression() = default;
 };

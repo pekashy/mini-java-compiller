@@ -9,7 +9,8 @@ class AssignmentList : public GrammarNode {
     using Ptr = std::shared_ptr<AssignmentList>;
     void AddAssignment(const Assignment::Ptr& pAssignment);
     static Ptr Create();
- private:
+    void Accept(PrintVisitor::Ptr visitor) override;
+private:
     AssignmentList() = default;
     std::vector<Assignment::Ptr> m_mapAssignmentPtrs;
 };

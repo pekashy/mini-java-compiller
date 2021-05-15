@@ -2,7 +2,9 @@
 
 #include "../GrammarNode.h"
 
+
 class Identifier;
+
 
 enum class Types
 {
@@ -17,7 +19,7 @@ class Type : public GrammarNode
 {
 public:
     using Ptr = std::shared_ptr<Type>;
-    static Ptr Create(const Ptr& pType);
+    virtual ~Type() = default;
 protected:
     explicit Type(const Ptr& pType);
     Type() = default;
@@ -31,6 +33,7 @@ public:
     using Ptr = std::shared_ptr<SimpleType>;
     static Ptr Create(Types m_eIdentKW);
     static Ptr Create(const std::shared_ptr<Identifier>& pIdentifier);
+    void Accept(PrintVisitor::Ptr visitor) override;
 private:
     explicit SimpleType(Types m_eIdentKW);
     explicit SimpleType(const std::shared_ptr<Identifier>& pIdentifier);
@@ -44,6 +47,7 @@ class ArrayType : public Type
 public:
     using Ptr = std::shared_ptr<ArrayType>;
     static Ptr Create(const SimpleType::Ptr& m_pType);
+    void Accept(PrintVisitor::Ptr visitor) override;
 private:
     explicit ArrayType(const SimpleType::Ptr& m_pType);
 };

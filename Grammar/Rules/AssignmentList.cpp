@@ -11,3 +11,12 @@ AssignmentList::Ptr AssignmentList::Create()
 {
     return std::shared_ptr<AssignmentList>(new AssignmentList());
 }
+
+
+void AssignmentList::Accept(PrintVisitor::Ptr visitor)
+{
+    for(auto& assignment : m_mapAssignmentPtrs)
+    {
+        assignment->Accept(visitor);
+    }
+}

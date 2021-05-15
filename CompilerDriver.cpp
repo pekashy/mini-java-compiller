@@ -12,6 +12,7 @@ namespace
         CompilerDriverImpl(bool bTraceParsing, bool bTraceScanning, bool bDebugLocation);
         int Parse(const std::string& f) override;
         void SetProgram(const Program::Ptr& pProgram) override;
+        void StartVisitor(PrintVisitor::Ptr pVisitor) override;
     private:
         std::shared_ptr<Scanner> CreateScanner(const std::string& f);
         std::shared_ptr<yy::parser> CreateParser(const std::shared_ptr<Scanner>& shScanner);
@@ -59,7 +60,7 @@ int CompilerDriverImpl::Parse(const std::string& f)
     auto shParser = CreateParser(shScanner);
     std::ifstream programStream(f);
     std::ifstream programStream2(f);
-    std::cout << programStream2.rdbuf();
+    //std::cout << programStream2.rdbuf();
     shScanner->yyrestart(programStream);
     return (*shParser)();
 }
@@ -67,6 +68,11 @@ int CompilerDriverImpl::Parse(const std::string& f)
 
 void CompilerDriverImpl::SetProgram(const std::shared_ptr<Program>& pProgram) {
     m_pProgram = pProgram;
+}
+
+void CompilerDriverImpl::StartVisitor(PrintVisitor::Ptr pVisitor)
+{
+    m_pProgram->Accept(pVisitor);
 }
 
 CompilerDriver::Ptr CompilerDriver::Create(bool bTraceParsing, bool bTraceScanning, bool bDebugLocation)

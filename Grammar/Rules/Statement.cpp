@@ -15,6 +15,13 @@ namespace
         AssertionStatement(const Expression::Ptr& pExpression)
             : m_pExpr(pExpression)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "AssertionStatement Visited" << std::endl;
+            m_pExpr->Accept(pVisitor);
+        }
+
     private:
         Expression::Ptr m_pExpr;
     };
@@ -26,6 +33,12 @@ namespace
         LocVarDeclStatement(const VariableDeclaration::Ptr& pDeclaration)
             : m_pDecl(pDeclaration)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "LocalVarDeclStatement Visited" << std::endl;
+            m_pDecl->Accept(pVisitor);
+        }
     private:
         VariableDeclaration::Ptr m_pDecl;
     };
@@ -37,6 +50,13 @@ namespace
         InnerStatement(const Statement::Ptr& pStatement)
             : m_pStatement(pStatement)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "InnerStatement Visited" << std::endl;
+            m_pStatement->Accept(pVisitor);
+        }
+
     private:
         Statement::Ptr m_pStatement;
     };
@@ -49,6 +69,14 @@ namespace
             : m_pExpression(pExpression)
             , m_pStatement(pStatement)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "IfStatement Visited" << std::endl;
+            m_pExpression->Accept(pVisitor);
+            m_pStatement->Accept(pVisitor);
+        }
+
     private:
         Expression::Ptr m_pExpression;
         Statement::Ptr m_pStatement;
@@ -63,6 +91,15 @@ namespace
             , m_pIfStatement(pIfStatement)
             , m_pElseStatement(pElseStatement)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "IfElseStatement Visited" << std::endl;
+            m_pExpression->Accept(pVisitor);
+            m_pIfStatement->Accept(pVisitor);
+            m_pElseStatement->Accept(pVisitor);
+        }
+
     private:
         Expression::Ptr m_pExpression;
         Statement::Ptr m_pIfStatement;
@@ -77,6 +114,14 @@ namespace
             : m_pExpression(pExpression)
             , m_pStatement(pStatement)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "WhileStatement Visited" << std::endl;
+            m_pExpression->Accept(pVisitor);
+            m_pStatement->Accept(pVisitor);
+        }
+
     private:
         Expression::Ptr m_pExpression;
         Statement::Ptr m_pStatement;
@@ -88,9 +133,14 @@ namespace
     public:
         explicit PrintStatement(const Expression::Ptr& pExpression)
             : m_pExpr(pExpression)
+        {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
         {
-            //std::cout << "Ready to print: " << m_pExpr->Eval() << std::endl;
+            std::cout << "PrintStatement Visited" << std::endl;
+            m_pExpr->Accept(pVisitor);
         }
+
     private:
         Expression::Ptr m_pExpr;
     };
@@ -102,6 +152,12 @@ namespace
         explicit ReturnStatement(const Expression::Ptr& pExpression)
             : m_pExpr(pExpression)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "ReturnStatement Visited" << std::endl;
+            m_pExpr->Accept(pVisitor);
+        }
     private:
         Expression::Ptr m_pExpr;
     };
@@ -114,6 +170,13 @@ namespace
             : m_pExpression(pExpression)
             , m_pLvalue(pLvalue)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "AssignmentStatement Visited" << std::endl;
+            m_pExpression->Accept(pVisitor);
+            m_pLvalue->Accept(pVisitor);
+        }
     private:
         Expression::Ptr m_pExpression;
         Lvalue::Ptr m_pLvalue;
@@ -126,6 +189,12 @@ namespace
         explicit MethodInvocStatement(const MethodInvocation::Ptr& pMethod)
             : m_pMethod(m_pMethod)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor) override
+        {
+            std::cout << "MethodInvocStatement Visited" << std::endl;
+            m_pMethod->Accept(pVisitor);
+        }
     private:
         MethodInvocation::Ptr m_pMethod;
     };

@@ -6,14 +6,14 @@
 class GrammarNode {
 public:
     using Ptr = std::shared_ptr<GrammarNode>;
-    // virtual void Visit(Visitor* visitor) = 0;
+    virtual void Accept(PrintVisitor::Ptr visitor) = 0;
 
     virtual ~GrammarNode() = default;
 };
 
 
 template <class T>
-class Chain {
+class Chain : public GrammarNode{
 public:
     using Ptr = std::shared_ptr<Chain<T>>;
     static Ptr Create(Ptr pNext, const std::shared_ptr<T> pContent)
@@ -24,6 +24,15 @@ public:
     static Ptr Create()
     {
         return Ptr(new Chain<T>());
+    }
+
+    void Accept(PrintVisitor::Ptr visitor) override
+    {
+        if(!m_bEmpty)
+        {
+            m_pContent->Accept(visitor);
+            m_pNext->Accept(visitor);
+        }
     }
 
 private:

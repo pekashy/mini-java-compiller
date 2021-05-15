@@ -5,7 +5,7 @@
 
 #include <functional>
 #include <stdexcept>
-
+#include <iostream>
 
 namespace
 {
@@ -13,15 +13,29 @@ namespace
     public:
         ArythmExpressionImpl(const Expression::Ptr& e1, const Expression::Ptr& e2, char action);
         [[nodiscard]] int Eval() const noexcept;
+        
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Arythm expression Visited" << std::endl;
+            m_pFirst->Accept(pVisitor);
+            m_pSecond->Accept(pVisitor);
+        }
+        
     private:
-        Ptr m_pFirst;
-        Ptr m_pSecond;
+        Expression::Ptr m_pFirst;
+        Expression::Ptr m_pSecond;
         std::function<int(const Ptr& e1, const Ptr& e2)> m_fnAction;
     };
 
     class IdentExpression: public Expression {
     public:
         explicit IdentExpression(const std::shared_ptr<Identifier>& pIdent)  noexcept;
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Ident expression Visited" << std::endl;
+            m_pIdent->Accept(pVisitor);
+        }
+
     private:
         Identifier::Ptr m_pIdent;
     };
@@ -29,6 +43,11 @@ namespace
     class ThisExpression: public Expression {
     public:
         explicit ThisExpression()  noexcept = default;
+        
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "This expression Visited" << std::endl;
+        }
     };
 
 
@@ -36,7 +55,12 @@ class NumberExpression: public ArythmExpression {
     public:
         explicit NumberExpression(int value) noexcept;
         int Eval() const noexcept override;
-    private:
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Number expression: '" << m_nValue << "' Visited" << std::endl;
+        }
+private:
         int m_nValue;
     };
 
@@ -47,6 +71,13 @@ class NumberExpression: public ArythmExpression {
         explicit LengthExpression(const Expression::Ptr& pExpr) noexcept
         : m_pExpr(pExpr)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Length expression Visited" << std::endl;
+            m_pExpr->Accept(pVisitor);
+        }
+
     private:
         Expression::Ptr m_pExpr;
     };
@@ -59,6 +90,14 @@ class NumberExpression: public ArythmExpression {
             : m_pType(pType)
             , m_pExpr(pExpr)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Stack var creation expression Visited" << std::endl;
+            m_pType->Accept(pVisitor);
+            m_pExpr->Accept(pVisitor);
+        }
+
     private:
         SimpleType::Ptr m_pType;
         Expression::Ptr m_pExpr;
@@ -71,6 +110,13 @@ class NumberExpression: public ArythmExpression {
         explicit HeapVarCreationExpression(const Identifier::Ptr& pType) noexcept
             : m_pType(pType)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Heap var creation expression Visited" << std::endl;
+            m_pType->Accept(pVisitor);
+        }
+
     private:
         Identifier::Ptr m_pType;
     };
@@ -82,6 +128,13 @@ class NumberExpression: public ArythmExpression {
         explicit SimplyTypeExpression(const SimpleType::Ptr& pType) noexcept
             : m_pType(pType)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Simple type expression Visited" << std::endl;
+            m_pType->Accept(pVisitor);
+        }
+
     private:
         SimpleType::Ptr m_pType;
     };
@@ -93,6 +146,13 @@ class NumberExpression: public ArythmExpression {
         explicit TypeIdentExpression(const Identifier::Ptr& pType) noexcept
             : m_pTypeIdentifier(pType)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Simple type identifier expression Visited" << std::endl;
+            m_pTypeIdentifier->Accept(pVisitor);
+        }
+
     private:
         Identifier::Ptr m_pTypeIdentifier;
     };
@@ -104,6 +164,13 @@ class NumberExpression: public ArythmExpression {
         explicit FieldInvocationExpression(const FieldInvocation::Ptr& pType) noexcept
             : m_pFieldInvocation(pType)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Field invocation expression Visited" << std::endl;
+            m_pFieldInvocation->Accept(pVisitor);
+        }
+
     private:
         FieldInvocation::Ptr m_pFieldInvocation;
     };
@@ -115,6 +182,13 @@ class NumberExpression: public ArythmExpression {
         explicit MethodInvocationExpression(const MethodInvocation::Ptr& pInvoc) noexcept
             : m_pMethodInvocation(pInvoc)
         {}
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Method invocation expression Visited" << std::endl;
+            m_pMethodInvocation->Accept(pVisitor);
+        }
+
     private:
         MethodInvocation::Ptr m_pMethodInvocation;
     };
@@ -131,6 +205,11 @@ class NumberExpression: public ArythmExpression {
             return m_bValue;
         }
 
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Simple Boolean expression: '" << m_bValue << "' Visited" << std::endl;
+        }
+
     private:
         bool m_bValue;
     };
@@ -141,13 +220,20 @@ class NumberExpression: public ArythmExpression {
         explicit ComplexBooleanExpression(const Expression::Ptr& pExpression1, std::string action,
                                           const Expression::Ptr& pExpression2) noexcept
             : m_pExpression1(pExpression1)
-            , m_pExpression2(m_pExpression2)
+            , m_pExpression2(pExpression2)
             , m_action(action)
         {}
 
         [[nodiscard]] bool Eval() const noexcept override
         {
             return false; // TODO : implement;
+        }
+
+        void Accept(PrintVisitor::Ptr pVisitor)
+        {
+            std::cout << "Complex Boolean expression: '" << m_action << "' Visited" << std::endl;
+            m_pExpression1->Accept(pVisitor);
+            m_pExpression2->Accept(pVisitor);
         }
 
     private:
@@ -169,14 +255,20 @@ class InverseBooleanExpression: public BooleanExpression {
             return !m_pExpression->Eval();
         }
 
-    private:
+    void Accept(PrintVisitor::Ptr pVisitor)
+    {
+        std::cout << "InverseBooleanExpression Boolean expression with result: '" << m_pExpression->Eval() << "' Visited" << std::endl;
+        m_pExpression->Accept(pVisitor);
+    }
+
+private:
         BooleanExpression::Ptr m_pExpression;
     };
 }
 
 ArythmExpressionImpl::ArythmExpressionImpl(const Expression::Ptr& pN1, const Expression::Ptr& pN2, char action)
-    : m_pFirst(std::dynamic_pointer_cast<ArythmExpression>(pN1))
-    , m_pSecond(std::dynamic_pointer_cast<ArythmExpression>(pN2))
+    : m_pFirst(pN1)
+    , m_pSecond(pN2)
 {
     switch(action)
     {
@@ -203,7 +295,7 @@ ArythmExpressionImpl::ArythmExpressionImpl(const Expression::Ptr& pN1, const Exp
 
 
 int ArythmExpressionImpl::Eval() const noexcept {
-    return m_fnAction(m_pFirst, m_pSecond);
+    return 0;
 }
 
 
@@ -309,3 +401,4 @@ Expression::Ptr Expression::CreateThisExpression() noexcept
 {
     return std::make_shared<ThisExpression>();
 }
+

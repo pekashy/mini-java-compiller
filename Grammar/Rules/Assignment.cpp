@@ -16,3 +16,8 @@ Assignment::Ptr Assignment::Create(const std::string &rVariable, const Expressio
     return std::shared_ptr<Assignment>(new Assignment(rVariable,
                                                       std::dynamic_pointer_cast<ArythmExpression>(pExpr)));
 }
+void Assignment::Accept(PrintVisitor::Ptr visitor)
+{
+    std::cout << "\nAssigned value '" << m_pExpression->Eval() << "' to variable '" << m_rVar << "'\n";
+    m_pExpression->Accept(visitor);
+}

@@ -3,3 +3,15 @@
 //
 
 #include "Visitor.h"
+#include "GrammarNode.h"
+
+
+void PrintVisitor::Visit(GrammarNode::Ptr pNode)
+{
+    pNode->Accept(Ptr(this));
+}
+
+PrintVisitor::Ptr PrintVisitor::Create()
+{
+    return std::shared_ptr<PrintVisitor>(new PrintVisitor());
+}

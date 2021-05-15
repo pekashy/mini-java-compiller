@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Declarations.h"
 #include "Types.h"
 #include "Identifier.h"
@@ -26,6 +27,12 @@ Formal::Formal(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
     , m_pIdentifier(pIdentifier)
 {}
 
+void Formal::Accept(PrintVisitor::Ptr visitor)
+{
+    std::cout << "Formal Visited" << std::endl;
+    m_pType->Accept(visitor);
+    m_pIdentifier->Accept(visitor);
+}
 
 Formals::Ptr Formals::Create(const Formals::Ptr& pLine, const Formal::Ptr& pContent)
 {
@@ -44,15 +51,22 @@ Formals::Formals(const Formals::Ptr& pLine, const Formal::Ptr& pContent)
 {}
 
 
-Declaration::Ptr Declaration::Create(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
+void Formals::Accept(PrintVisitor::Ptr visitor)
 {
-    return std::shared_ptr<Declaration>(new Declaration(pType, pIdentifier));
+    std::cout << "Formals Visited" << std::endl;
+    if (m_pContent)
+    {
+        m_pContent->Accept(visitor);
+    }
+    if (m_pNextContent)
+    {
+        m_pNextContent->Accept(visitor);
+    }
 }
 
 
-Declaration::Declaration(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
-    : m_pType(pType)
-    , m_pIdentifier(pIdentifier)
+Declaration::Declaration(const std::shared_ptr<Identifier>& pIdentifier)
+    : m_pIdentifier(pIdentifier)
 {}
 
 
@@ -65,15 +79,29 @@ MethodDeclaration::Ptr MethodDeclaration::Create(const Type::Ptr &pType,
 }
 
 
-MethodDeclaration::MethodDeclaration(const Type::Ptr &pType,
-                                     const Identifier::Ptr &pIdentifier,
+MethodDeclaration::MethodDeclaration(const Type::Ptr& pType,
+                                     const Identifier::Ptr& pIdentifier,
                                      const Chain<Statement>::Ptr& pStatements,
-                                     const Formals::Ptr &pFormals)
-                                     : Declaration(pType, pIdentifier)
+                                     const Formals::Ptr& pFormals)
+                                     : Declaration(pIdentifier)
                                      , m_pStatements(pStatements)
                                      , m_pFormals(pFormals)
-{}
+                                     , m_pReturnType(pType)
+{
 
+}
+
+
+void MethodDeclaration::Accept(PrintVisitor::Ptr visitor)
+{
+    std::cout << "Method Declaration Visited" << std::endl;
+    if(m_pStatements)
+    {
+        m_pStatements->Accept(visitor);
+    }
+    m_pReturnType->Accept(visitor);
+    m_pFormals->Accept(visitor);
+}
 
 VariableDeclaration::Ptr VariableDeclaration::Create(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
 {
@@ -81,10 +109,18 @@ VariableDeclaration::Ptr VariableDeclaration::Create(const Type::Ptr &pType, con
 }
 
 
-VariableDeclaration::VariableDeclaration(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
-    : Declaration(pType, pIdentifier)
+VariableDeclaration::VariableDeclaration(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier)
+    : Declaration(pIdentifier)
+    , m_pType(pType)
 {}
 
+
+void VariableDeclaration::Accept(PrintVisitor::Ptr visitor)
+{
+    std::cout << "Variable Declaration Visited" << std::endl;
+    m_pType->Accept(visitor);
+    m_pIdentifier->Accept(visitor);
+}
 
 ClassDeclaration::Ptr ClassDeclaration::Create(const Identifier::Ptr &pClassId,
                          const Identifier::Ptr &pParentClassId,
@@ -102,17 +138,30 @@ ClassDeclaration::Ptr ClassDeclaration::Create(const Identifier::Ptr &pClassId,
 
 
 
-ClassDeclaration::ClassDeclaration(const Identifier::Ptr &pClassId,
-                                   const Identifier::Ptr &pParentClassId,
+ClassDeclaration::ClassDeclaration(const Identifier::Ptr& pClassId,
+                                   const Identifier::Ptr& pParentClassId,
                                    const Declaration::Ptr& pDeclaration)
-                                   : m_pClassId(pClassId)
+                                   : Declaration(pClassId)
                                    , m_pParentClassId(pParentClassId)
-                                   , m_pClassDeclaration(pDeclaration)
 {}
 
 
-ClassDeclaration::ClassDeclaration(const Identifier::Ptr &pClassId,
-                                   const Chain<Declaration>::Ptr &pDeclarations)
-                                    : m_pClassId(pClassId)
+ClassDeclaration::ClassDeclaration(const Identifier::Ptr& pClassId,
+                                   const Chain<Declaration>::Ptr& pDeclarations)
+                                    : Declaration(pClassId)
                                     , m_pClassDeclarations(pDeclarations)
 {}
+
+void ClassDeclaration::Accept(PrintVisitor::Ptr visitor)
+{
+    std::cout << "Class Declaration Visited" << std::endl;
+    m_pIdentifier->Accept(visitor);
+    if (m_pParentClassId)
+    {
+        m_pParentClassId->Accept(visitor);
+    }
+    if (m_pClassDeclarations)
+    {
+        m_pClassDeclarations->Accept(visitor);
+    }
+}
