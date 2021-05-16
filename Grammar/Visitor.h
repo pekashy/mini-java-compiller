@@ -23,3 +23,13 @@ public:
 private:
     PrintVisitor() = default;
 };
+
+
+class InterpreterVisitor : public Visitor, public std::enable_shared_from_this<InterpreterVisitor> {
+public:
+    using Ptr = std::shared_ptr<InterpreterVisitor>;
+    static InterpreterVisitor::Ptr Create();
+    void Visit(std::shared_ptr<GrammarNode> pNode) override;
+private:
+    InterpreterVisitor() = default;
+};

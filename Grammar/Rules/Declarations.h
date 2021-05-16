@@ -13,9 +13,13 @@ class Formal : public GrammarNode
 public:
     using Ptr = std::shared_ptr<Formal>;
     static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
-    void Accept(PrintVisitor::Ptr visitor) override;
+    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
+    void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
 private:
     Formal(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
+    template<class V>
+    void GenericAccept(const V& pVisitor);
+
     std::shared_ptr<Type> m_pType;
     std::shared_ptr<Identifier> m_pIdentifier;
 };
@@ -27,9 +31,13 @@ public:
     using Ptr = std::shared_ptr<Formals>;
     static Ptr Create(const Formals::Ptr& pLine, const Formal::Ptr& pContent);
     static Ptr Create();
-    void Accept(PrintVisitor::Ptr visitor) override;
+    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
+    void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
 protected:
     Formals(const Formals::Ptr& pLine, const Formal::Ptr& pContent);
+    template<class V>
+    void GenericAccept(const V& pVisitor);
+
     Formals::Ptr m_pNextContent;
     Formal::Ptr m_pContent;
 };
@@ -53,14 +61,18 @@ public:
         const Declaration::Ptr& pDeclaration);
     static Ptr Create(const std::shared_ptr<Identifier>& pClassId, const Chain<Declaration>::Ptr& pDeclarations);
 
-    void Accept(PrintVisitor::Ptr visitor) override;
+    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
+    void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
 protected:
     ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const std::shared_ptr<Identifier>& pParentClassId,
                      const Declaration::Ptr& pDeclaration);
 
     ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const Chain<Declaration>::Ptr& pDeclarations);
 
-    std::shared_ptr<Identifier> m_pParentClassId = nullptr;
+    template<class V>
+    void GenericAccept(const V& pVisitor);
+
+    std::shared_ptr<Identifier> m_pParentClassId;
     const Chain<Declaration>::Ptr m_pClassDeclarations;
 };
 
@@ -71,10 +83,14 @@ public:
     using Ptr = std::shared_ptr<MethodDeclaration>;
     static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier,
                       const Chain<Statement>::Ptr& pStatements, const Formals::Ptr& pFormals);
-    void Accept(PrintVisitor::Ptr visitor) override;
+    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
+    void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
 private:
     MethodDeclaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier,
                          const Chain<Statement>::Ptr& pStatements, const Formals::Ptr& pFormals);
+    template<class V>
+    void GenericAccept(const V& pVisitor);
+
     Chain<Statement>::Ptr m_pStatements;
     std::shared_ptr<Type> m_pReturnType;
     Formals::Ptr m_pFormals;
@@ -86,8 +102,12 @@ class VariableDeclaration : public Declaration
 public:
     using Ptr = std::shared_ptr<VariableDeclaration>;
     static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
-    void Accept(PrintVisitor::Ptr visitor) override;
+    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
+    void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
 private:
     VariableDeclaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
+    template<class V>
+    void GenericAccept(const V& pVisitor);
+
     std::shared_ptr<Type> m_pType;
 };

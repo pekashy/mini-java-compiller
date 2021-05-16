@@ -20,11 +20,22 @@ MainClassDeclaration::MainClassDeclaration(const Statement::Ptr &pStatement, con
 }
 
 
-void MainClassDeclaration::Accept(PrintVisitor::Ptr visitor)
+void MainClassDeclaration::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Main class Visited" << std::endl;
-    m_pMainClassStatement->Accept(visitor);
-    m_pMainClassName->Accept(visitor);
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+void MainClassDeclaration::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void MainClassDeclaration::GenericAccept(const V& pVisitor)
+{
+    m_pMainClassStatement->Accept(pVisitor);
+    m_pMainClassName->Accept(pVisitor);
 }
 
 
@@ -41,9 +52,20 @@ Program::Program(const MainClassDeclaration::Ptr &pMainClass, const Chain<ClassD
 {}
 
 
-void Program::Accept(PrintVisitor::Ptr visitor)
+void Program::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Program Visited" << std::endl;
-    m_pMainClass->Accept(visitor);
-    m_pClassDeclarations->Accept(visitor);
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+void Program::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void Program::GenericAccept(const V& pVisitor)
+{
+    m_pMainClass->Accept(pVisitor);
+    m_pClassDeclarations->Accept(pVisitor);
 }

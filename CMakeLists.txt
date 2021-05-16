@@ -33,7 +33,6 @@ add_executable(
         FlexBisonOutput/Scanner.cpp
         CompilerDriver.cpp CompilerDriver.h
         Grammar/Rules/Assignment.cpp
-        Grammar/Rules/AssignmentList.cpp
         Scanner.h Location.cpp Location.h ScannerImpl.cpp
         Grammar/Rules/Statement.cpp Grammar/Rules/Statement.h Grammar/Visitor.cpp
         Grammar/Visitor.h Grammar/GrammarNode.cpp Grammar/GrammarNode.h

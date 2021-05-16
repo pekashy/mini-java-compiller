@@ -14,13 +14,25 @@ namespace
         ArythmExpressionImpl(const Expression::Ptr& e1, const Expression::Ptr& e2, char action);
         [[nodiscard]] int Eval() const noexcept;
         
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Arythm expression Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pFirst->Accept(pVisitor);
             m_pSecond->Accept(pVisitor);
         }
-        
+
+
     private:
         Expression::Ptr m_pFirst;
         Expression::Ptr m_pSecond;
@@ -30,9 +42,20 @@ namespace
     class IdentExpression: public Expression {
     public:
         explicit IdentExpression(const std::shared_ptr<Identifier>& pIdent)  noexcept;
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Ident expression Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pIdent->Accept(pVisitor);
         }
 
@@ -44,10 +67,22 @@ namespace
     public:
         explicit ThisExpression()  noexcept = default;
         
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "This expression Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+        }
+
     };
 
 
@@ -56,10 +91,22 @@ class NumberExpression: public ArythmExpression {
         explicit NumberExpression(int value) noexcept;
         int Eval() const noexcept override;
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
+        {
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
         {
             std::cout << "Number expression: '" << m_nValue << "' Visited" << std::endl;
         }
+
 private:
         int m_nValue;
     };
@@ -72,12 +119,22 @@ private:
         : m_pExpr(pExpr)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Length expression Visited" << std::endl;
-            m_pExpr->Accept(pVisitor);
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
 
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+            m_pExpr->Accept(pVisitor);
+        }
     private:
         Expression::Ptr m_pExpr;
     };
@@ -91,12 +148,24 @@ private:
             , m_pExpr(pExpr)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Stack var creation expression Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pType->Accept(pVisitor);
             m_pExpr->Accept(pVisitor);
         }
+
 
     private:
         SimpleType::Ptr m_pType;
@@ -111,9 +180,20 @@ private:
             : m_pType(pType)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Heap var creation expression Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pType->Accept(pVisitor);
         }
 
@@ -122,40 +202,6 @@ private:
     };
 
 
-    class SimplyTypeExpression: public Expression
-    {
-    public:
-        explicit SimplyTypeExpression(const SimpleType::Ptr& pType) noexcept
-            : m_pType(pType)
-        {}
-
-        void Accept(PrintVisitor::Ptr pVisitor)
-        {
-            std::cout << "Simple type expression Visited" << std::endl;
-            m_pType->Accept(pVisitor);
-        }
-
-    private:
-        SimpleType::Ptr m_pType;
-    };
-
-
-    class TypeIdentExpression: public Expression
-    {
-    public:
-        explicit TypeIdentExpression(const Identifier::Ptr& pType) noexcept
-            : m_pTypeIdentifier(pType)
-        {}
-
-        void Accept(PrintVisitor::Ptr pVisitor)
-        {
-            std::cout << "Simple type identifier expression Visited" << std::endl;
-            m_pTypeIdentifier->Accept(pVisitor);
-        }
-
-    private:
-        Identifier::Ptr m_pTypeIdentifier;
-    };
 
 
     class FieldInvocationExpression: public Expression
@@ -165,11 +211,23 @@ private:
             : m_pFieldInvocation(pType)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Field invocation expression Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pFieldInvocation->Accept(pVisitor);
         }
+
 
     private:
         FieldInvocation::Ptr m_pFieldInvocation;
@@ -183,9 +241,20 @@ private:
             : m_pMethodInvocation(pInvoc)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Method invocation expression Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pMethodInvocation->Accept(pVisitor);
         }
 
@@ -205,10 +274,22 @@ private:
             return m_bValue;
         }
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Simple Boolean expression: '" << m_bValue << "' Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+        }
+
 
     private:
         bool m_bValue;
@@ -229,9 +310,20 @@ private:
             return false; // TODO : implement;
         }
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Complex Boolean expression: '" << m_action << "' Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pExpression1->Accept(pVisitor);
             m_pExpression2->Accept(pVisitor);
         }
@@ -255,9 +347,20 @@ class InverseBooleanExpression: public BooleanExpression {
             return !m_pExpression->Eval();
         }
 
-    void Accept(PrintVisitor::Ptr pVisitor)
+    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
     {
         std::cout << "InverseBooleanExpression Boolean expression with result: '" << m_pExpression->Eval() << "' Visited" << std::endl;
+        GenericAccept<PrintVisitor::Ptr>(pVisitor);
+    }
+
+    void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+    {
+        GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+    }
+
+    template<class V>
+    void GenericAccept(const V& pVisitor)
+    {
         m_pExpression->Accept(pVisitor);
     }
 

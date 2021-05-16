@@ -10,7 +10,6 @@
     #include <string>
     #include <memory>
     class Assignment;
-    class AssignmentList;
     class Expression;
     class BooleanExpression;
     class GrammarNode;
@@ -51,7 +50,6 @@
     #include "../Grammar/Rules/Invocation.h"
     #include "../Grammar/Rules/Declarations.h"
     #include "../Grammar/Rules/Expression.h"
-    #include "../Grammar/Rules/AssignmentList.h"
     #include "../Grammar/Rules/Assignment.h"
     #include "../Grammar/Rules/Types.h"
     #include "../Grammar/Rules/Identifier.h"

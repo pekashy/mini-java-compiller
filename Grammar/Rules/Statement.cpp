@@ -16,11 +16,23 @@ namespace
             : m_pExpr(pExpression)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "AssertionStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pExpr->Accept(pVisitor);
         }
+
 
     private:
         Expression::Ptr m_pExpr;
@@ -34,11 +46,23 @@ namespace
             : m_pDecl(pDeclaration)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "LocalVarDeclStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pDecl->Accept(pVisitor);
         }
+
     private:
         VariableDeclaration::Ptr m_pDecl;
     };
@@ -51,9 +75,20 @@ namespace
             : m_pStatement(pStatement)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "InnerStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pStatement->Accept(pVisitor);
         }
 
@@ -70,9 +105,20 @@ namespace
             , m_pStatement(pStatement)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "IfStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pExpression->Accept(pVisitor);
             m_pStatement->Accept(pVisitor);
         }
@@ -92,13 +138,25 @@ namespace
             , m_pElseStatement(pElseStatement)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "IfElseStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pExpression->Accept(pVisitor);
             m_pIfStatement->Accept(pVisitor);
             m_pElseStatement->Accept(pVisitor);
         }
+
 
     private:
         Expression::Ptr m_pExpression;
@@ -115,9 +173,20 @@ namespace
             , m_pStatement(pStatement)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "WhileStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pExpression->Accept(pVisitor);
             m_pStatement->Accept(pVisitor);
         }
@@ -135,12 +204,22 @@ namespace
             : m_pExpr(pExpression)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "PrintStatement Visited" << std::endl;
-            m_pExpr->Accept(pVisitor);
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
 
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+            m_pExpr->Accept(pVisitor);
+        }
     private:
         Expression::Ptr m_pExpr;
     };
@@ -153,11 +232,23 @@ namespace
             : m_pExpr(pExpression)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "ReturnStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pExpr->Accept(pVisitor);
         }
+
     private:
         Expression::Ptr m_pExpr;
     };
@@ -171,12 +262,24 @@ namespace
             , m_pLvalue(pLvalue)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "AssignmentStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pExpression->Accept(pVisitor);
             m_pLvalue->Accept(pVisitor);
         }
+
     private:
         Expression::Ptr m_pExpression;
         Lvalue::Ptr m_pLvalue;
@@ -190,11 +293,23 @@ namespace
             : m_pMethod(m_pMethod)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "MethodInvocStatement Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pMethod->Accept(pVisitor);
         }
+
     private:
         MethodInvocation::Ptr m_pMethod;
     };

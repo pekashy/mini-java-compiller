@@ -6,7 +6,8 @@
 class GrammarNode {
 public:
     using Ptr = std::shared_ptr<GrammarNode>;
-    virtual void Accept(PrintVisitor::Ptr visitor) = 0;
+    virtual void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) = 0;
+    virtual void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) = 0;
 
     virtual ~GrammarNode() = default;
 };
@@ -26,12 +27,24 @@ public:
         return Ptr(new Chain<T>());
     }
 
-    void Accept(PrintVisitor::Ptr visitor) override
+    void Accept(const PrintVisitor::Ptr& visitor) override
+    {
+        GenericAccept<PrintVisitor::Ptr>(visitor);
+    }
+
+    void Accept(const InterpreterVisitor::Ptr& visitor) override
+    {
+        GenericAccept<InterpreterVisitor::Ptr>(visitor);
+    }
+
+
+    template<class V>
+    void GenericAccept(const V& pVisitor)
     {
         if(!m_bEmpty)
         {
-            m_pContent->Accept(visitor);
-            m_pNext->Accept(visitor);
+            m_pContent->Accept(pVisitor);
+            m_pNext->Accept(pVisitor);
         }
     }
 

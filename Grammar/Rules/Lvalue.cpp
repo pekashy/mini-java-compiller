@@ -13,9 +13,20 @@ namespace
         : m_pIdentifier(pIdent)
         {}
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Identifier Lvalue Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pIdentifier->Accept(pVisitor);
         }
 
@@ -32,9 +43,20 @@ namespace
         {}
 
 
-        void Accept(PrintVisitor::Ptr pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
             std::cout << "Expression Lvalue Visited" << std::endl;
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
             m_pIdentifier->Accept(pVisitor);
             m_pExpression->Accept(pVisitor);
         }
@@ -52,11 +74,23 @@ namespace
             : m_pInvocation(pInvoc)
         {}
 
-        void Accept(PrintVisitor::Ptr visitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "Field Lvalue Visited" << std::endl;
-            m_pInvocation->Accept(visitor);
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+            m_pInvocation->Accept(pVisitor);
+        }
+
     private:
         FieldInvocation::Ptr m_pInvocation;
     };

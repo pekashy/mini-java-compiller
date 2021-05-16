@@ -12,11 +12,23 @@ namespace
         : m_pIdent(pIdent)
         {}
 
-        void Accept(PrintVisitor::Ptr visitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "Simple Field Invocation Visited" << std::endl;
-            m_pIdent->Accept(visitor);
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+            m_pIdent->Accept(pVisitor);
+        }
+
 
     private:
         Identifier::Ptr m_pIdent;
@@ -32,12 +44,25 @@ namespace
         {}
 
 
-        void Accept(PrintVisitor::Ptr visitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "Arr Field Invocation Visited" << std::endl;
-            m_pExpression->Accept(visitor);
-            m_pIdent->Accept(visitor);
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
+
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+            m_pExpression->Accept(pVisitor);
+            m_pIdent->Accept(pVisitor);
+        }
+
     private:
         Identifier::Ptr m_pIdent;
         Expression::Ptr m_pExpression;
@@ -54,12 +79,23 @@ namespace
             , m_pArgExpression(pArgExpr)
         {}
 
-        void Accept(PrintVisitor::Ptr visitor) override
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "Method Invocation Visited" << std::endl;
-            m_pArgExpression->Accept(visitor);
-            m_pIdent->Accept(visitor);
-            m_pCalleeExpression->Accept(visitor);
+            GenericAccept<PrintVisitor::Ptr>(pVisitor);
+        }
+
+        void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override
+        {
+            GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+        }
+
+        template<class V>
+        void GenericAccept(const V& pVisitor)
+        {
+            m_pArgExpression->Accept(pVisitor);
+            m_pIdent->Accept(pVisitor);
+            m_pCalleeExpression->Accept(pVisitor);
         }
 
     private:

@@ -12,7 +12,13 @@ Identifier::Ptr Identifier::Create(const std::string &rName)
 }
 
 
-void Identifier::Accept(PrintVisitor::Ptr visitor)
+void Identifier::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Identifier '" << m_rName << "' Visited" << std::endl;
+}
+
+
+void Identifier::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+
 }

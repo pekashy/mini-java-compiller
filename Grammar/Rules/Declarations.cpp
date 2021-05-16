@@ -27,12 +27,24 @@ Formal::Formal(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
     , m_pIdentifier(pIdentifier)
 {}
 
-void Formal::Accept(PrintVisitor::Ptr visitor)
+void Formal::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Formal Visited" << std::endl;
-    m_pType->Accept(visitor);
-    m_pIdentifier->Accept(visitor);
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
 }
+
+void Formal::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void Formal::GenericAccept(const V& pVisitor)
+{
+    m_pType->Accept(pVisitor);
+    m_pIdentifier->Accept(pVisitor);
+}
+
 
 Formals::Ptr Formals::Create(const Formals::Ptr& pLine, const Formal::Ptr& pContent)
 {
@@ -51,19 +63,29 @@ Formals::Formals(const Formals::Ptr& pLine, const Formal::Ptr& pContent)
 {}
 
 
-void Formals::Accept(PrintVisitor::Ptr visitor)
+void Formals::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Formals Visited" << std::endl;
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+void Formals::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void Formals::GenericAccept(const V& pVisitor)
+{
     if (m_pContent)
     {
-        m_pContent->Accept(visitor);
+        m_pContent->Accept(pVisitor);
     }
     if (m_pNextContent)
     {
-        m_pNextContent->Accept(visitor);
+        m_pNextContent->Accept(pVisitor);
     }
 }
-
 
 Declaration::Declaration(const std::shared_ptr<Identifier>& pIdentifier)
     : m_pIdentifier(pIdentifier)
@@ -92,16 +114,29 @@ MethodDeclaration::MethodDeclaration(const Type::Ptr& pType,
 }
 
 
-void MethodDeclaration::Accept(PrintVisitor::Ptr visitor)
+void MethodDeclaration::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Method Declaration Visited" << std::endl;
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+
+void MethodDeclaration::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void MethodDeclaration::GenericAccept(const V& pVisitor)
+{
     if(m_pStatements)
     {
-        m_pStatements->Accept(visitor);
+        m_pStatements->Accept(pVisitor);
     }
-    m_pReturnType->Accept(visitor);
-    m_pFormals->Accept(visitor);
+    m_pReturnType->Accept(pVisitor);
+    m_pFormals->Accept(pVisitor);
 }
+
 
 VariableDeclaration::Ptr VariableDeclaration::Create(const Type::Ptr &pType, const Identifier::Ptr &pIdentifier)
 {
@@ -115,11 +150,22 @@ VariableDeclaration::VariableDeclaration(const Type::Ptr& pType, const Identifie
 {}
 
 
-void VariableDeclaration::Accept(PrintVisitor::Ptr visitor)
+void VariableDeclaration::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Variable Declaration Visited" << std::endl;
-    m_pType->Accept(visitor);
-    m_pIdentifier->Accept(visitor);
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+void VariableDeclaration::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void VariableDeclaration::GenericAccept(const V& pVisitor)
+{
+    m_pType->Accept(pVisitor);
+    m_pIdentifier->Accept(pVisitor);
 }
 
 ClassDeclaration::Ptr ClassDeclaration::Create(const Identifier::Ptr &pClassId,
@@ -152,16 +198,27 @@ ClassDeclaration::ClassDeclaration(const Identifier::Ptr& pClassId,
                                     , m_pClassDeclarations(pDeclarations)
 {}
 
-void ClassDeclaration::Accept(PrintVisitor::Ptr visitor)
+void ClassDeclaration::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "Class Declaration Visited" << std::endl;
-    m_pIdentifier->Accept(visitor);
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+void ClassDeclaration::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void ClassDeclaration::GenericAccept(const V& pVisitor)
+{
+    m_pIdentifier->Accept(pVisitor);
     if (m_pParentClassId)
     {
-        m_pParentClassId->Accept(visitor);
+        m_pParentClassId->Accept(pVisitor);
     }
     if (m_pClassDeclarations)
     {
-        m_pClassDeclarations->Accept(visitor);
+        m_pClassDeclarations->Accept(pVisitor);
     }
 }

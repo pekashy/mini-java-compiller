@@ -30,12 +30,24 @@ SimpleType::SimpleType(const Identifier::Ptr& pIdentifier)
 {}
 
 
-void SimpleType::Accept(PrintVisitor::Ptr visitor)
+
+void SimpleType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "SimpleType '" << static_cast<int>(m_eIdentKW) << "' Visited" << std::endl;
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+void SimpleType::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void SimpleType::GenericAccept(const V& pVisitor)
+{
     if(m_pIdentifier)
     {
-        m_pIdentifier->Accept(visitor);
+        m_pIdentifier->Accept(pVisitor);
     }
 }
 
@@ -51,11 +63,22 @@ ArrayType::ArrayType(const SimpleType::Ptr& pType)
 {}
 
 
-void ArrayType::Accept(PrintVisitor::Ptr visitor)
+void ArrayType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "ArrayType Visited" << std::endl;
+    GenericAccept<PrintVisitor::Ptr>(pVisitor);
+}
+
+void ArrayType::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
+{
+    GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+template<class V>
+void ArrayType::GenericAccept(const V& pVisitor)
+{
     if(m_pAssociatedType)
     {
-        m_pAssociatedType->Accept(visitor);
+        m_pAssociatedType->Accept(pVisitor);
     }
 }
