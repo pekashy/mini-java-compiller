@@ -1,5 +1,5 @@
-#include "CompilerDriver.h"
-#include "Grammar/Visitor.h"
+#include <CompilerDriver.h>
+#include <Visitors/Visitor.h>
 #include <iostream>
 
 int main(int argc, char** argv)
