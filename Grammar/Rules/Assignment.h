@@ -8,7 +8,7 @@
 class ArythmExpression;
 class Expression;
 
-class Assignment : public GrammarNode{
+class Assignment : public GrammarNode, std::enable_shared_from_this<Assignment> {
  public:
     using Ptr = std::shared_ptr<Assignment>;
     static Ptr Create(const std::string& rVariable, const std::shared_ptr<Expression>& pExpr);

@@ -29,7 +29,7 @@ void Assignment::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
 template<class V>
 void Assignment::GenericAccept(const V& pVisitor)
 {
-    m_pExpression->Accept(pVisitor);
+    pVisitor->Visit(m_pExpression);
 }
 
 

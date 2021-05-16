@@ -26,7 +26,7 @@ namespace
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pIdent->Accept(pVisitor);
+            pVisitor->Visit(m_pIdent);
         }
 
 
@@ -59,8 +59,8 @@ namespace
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pExpression->Accept(pVisitor);
-            m_pIdent->Accept(pVisitor);
+            pVisitor->Visit(m_pExpression);
+            pVisitor->Visit(m_pIdent);
         }
 
     private:
@@ -93,9 +93,9 @@ namespace
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pArgExpression->Accept(pVisitor);
-            m_pIdent->Accept(pVisitor);
-            m_pCalleeExpression->Accept(pVisitor);
+            pVisitor->Visit(m_pArgExpression);
+            //pVisitor->Visit(m_pIdent);
+            //pVisitor->Visit(m_pCalleeExpression);
         }
 
     private:

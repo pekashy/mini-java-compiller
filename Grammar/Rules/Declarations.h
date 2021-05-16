@@ -8,7 +8,7 @@ class Statement;
 
 
 // TODO: vector of statements and types
-class Formal : public GrammarNode
+class Formal : public GrammarNode, std::enable_shared_from_this<Formal>
 {
 public:
     using Ptr = std::shared_ptr<Formal>;
@@ -25,7 +25,7 @@ private:
 };
 
 
-class Formals : public GrammarNode
+class Formals : public GrammarNode, std::enable_shared_from_this<Formals>
 {
 public:
     using Ptr = std::shared_ptr<Formals>;
@@ -53,7 +53,7 @@ protected:
 };
 
 
-class ClassDeclaration : public Declaration
+class ClassDeclaration : public Declaration, std::enable_shared_from_this<ClassDeclaration>
 {
 public:
     using Ptr = std::shared_ptr<ClassDeclaration>;

@@ -28,8 +28,8 @@ namespace
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pFirst->Accept(pVisitor);
-            m_pSecond->Accept(pVisitor);
+            pVisitor->Visit(m_pFirst);
+            pVisitor->Visit(m_pSecond);
         }
 
 
@@ -56,7 +56,7 @@ namespace
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pIdent->Accept(pVisitor);
+            pVisitor->Visit(m_pIdent);
         }
 
     private:
@@ -93,6 +93,7 @@ class NumberExpression: public ArythmExpression {
 
         void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
         {
+            std::cout << "Number expression: '" << m_nValue << "' Visited" << std::endl;
             GenericAccept<PrintVisitor::Ptr>(pVisitor);
         }
 
@@ -104,7 +105,6 @@ class NumberExpression: public ArythmExpression {
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            std::cout << "Number expression: '" << m_nValue << "' Visited" << std::endl;
         }
 
 private:
@@ -133,7 +133,7 @@ private:
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pExpr->Accept(pVisitor);
+            pVisitor->Visit(m_pExpr);
         }
     private:
         Expression::Ptr m_pExpr;
@@ -162,8 +162,8 @@ private:
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pType->Accept(pVisitor);
-            m_pExpr->Accept(pVisitor);
+            pVisitor->Visit(m_pType);
+            pVisitor->Visit(m_pExpr);
         }
 
 
@@ -194,7 +194,7 @@ private:
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pType->Accept(pVisitor);
+            pVisitor->Visit(m_pType);
         }
 
     private:
@@ -225,7 +225,7 @@ private:
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pFieldInvocation->Accept(pVisitor);
+            pVisitor->Visit(m_pFieldInvocation);
         }
 
 
@@ -241,7 +241,7 @@ private:
             : m_pMethodInvocation(pInvoc)
         {}
 
-        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "Method invocation expression Visited" << std::endl;
             GenericAccept<PrintVisitor::Ptr>(pVisitor);
@@ -255,7 +255,7 @@ private:
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pMethodInvocation->Accept(pVisitor);
+            pVisitor->Visit(m_pMethodInvocation);
         }
 
     private:
@@ -274,7 +274,7 @@ private:
             return m_bValue;
         }
 
-        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "Simple Boolean expression: '" << m_bValue << "' Visited" << std::endl;
             GenericAccept<PrintVisitor::Ptr>(pVisitor);
@@ -310,7 +310,7 @@ private:
             return false; // TODO : implement;
         }
 
-        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
+        void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
         {
             std::cout << "Complex Boolean expression: '" << m_action << "' Visited" << std::endl;
             GenericAccept<PrintVisitor::Ptr>(pVisitor);
@@ -324,8 +324,8 @@ private:
         template<class V>
         void GenericAccept(const V& pVisitor)
         {
-            m_pExpression1->Accept(pVisitor);
-            m_pExpression2->Accept(pVisitor);
+            pVisitor->Visit(m_pExpression1);
+            pVisitor->Visit(m_pExpression2);
         }
 
     private:
@@ -347,7 +347,7 @@ class InverseBooleanExpression: public BooleanExpression {
             return !m_pExpression->Eval();
         }
 
-    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
+    void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override
     {
         std::cout << "InverseBooleanExpression Boolean expression with result: '" << m_pExpression->Eval() << "' Visited" << std::endl;
         GenericAccept<PrintVisitor::Ptr>(pVisitor);
@@ -361,7 +361,7 @@ class InverseBooleanExpression: public BooleanExpression {
     template<class V>
     void GenericAccept(const V& pVisitor)
     {
-        m_pExpression->Accept(pVisitor);
+        pVisitor->Visit(m_pExpression);
     }
 
 private:

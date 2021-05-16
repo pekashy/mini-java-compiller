@@ -2,34 +2,24 @@
 #include "Types.h"
 #include "Identifier.h"
 
-
-Type::Type(const Type::Ptr& pType)
-    : m_pAssociatedType(pType)
-{}
-
+Type::Type(const Type::Ptr &pType)
+    : m_pAssociatedType(pType) {}
 
 SimpleType::Ptr SimpleType::Create(Types m_eIdentKW)
 {
     return std::shared_ptr<SimpleType>(new SimpleType(m_eIdentKW));
 }
 
-
-SimpleType::Ptr SimpleType::Create(const Identifier::Ptr& pIdentifier)
+SimpleType::Ptr SimpleType::Create(const Identifier::Ptr &pIdentifier)
 {
     return std::shared_ptr<SimpleType>(new SimpleType(pIdentifier));
 }
 
-
 SimpleType::SimpleType(Types eIdentKW)
-    : m_eIdentKW(eIdentKW)
-{}
+    : m_eIdentKW(eIdentKW) {}
 
-
-SimpleType::SimpleType(const Identifier::Ptr& pIdentifier)
-    : m_pIdentifier(pIdentifier)
-{}
-
-
+SimpleType::SimpleType(const Identifier::Ptr &pIdentifier)
+    : m_pIdentifier(pIdentifier) {}
 
 void SimpleType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
@@ -43,25 +33,21 @@ void SimpleType::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
 }
 
 template<class V>
-void SimpleType::GenericAccept(const V& pVisitor)
+void SimpleType::GenericAccept(const V &pVisitor)
 {
-    if(m_pIdentifier)
+    if (m_pIdentifier)
     {
-        m_pIdentifier->Accept(pVisitor);
+        pVisitor->Visit(m_pIdentifier);
     }
 }
 
-
-ArrayType::Ptr ArrayType::Create(const SimpleType::Ptr& pType)
+ArrayType::Ptr ArrayType::Create(const SimpleType::Ptr &pType)
 {
     return std::shared_ptr<ArrayType>(new ArrayType(pType));
 }
 
-
-ArrayType::ArrayType(const SimpleType::Ptr& pType)
-    : Type(pType)
-{}
-
+ArrayType::ArrayType(const SimpleType::Ptr &pType)
+    : Type(pType) {}
 
 void ArrayType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
@@ -75,10 +61,10 @@ void ArrayType::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
 }
 
 template<class V>
-void ArrayType::GenericAccept(const V& pVisitor)
+void ArrayType::GenericAccept(const V &pVisitor)
 {
-    if(m_pAssociatedType)
+    if (m_pAssociatedType)
     {
-        m_pAssociatedType->Accept(pVisitor);
+        pVisitor->Visit(m_pAssociatedType);
     }
 }

@@ -20,5 +20,5 @@ void Identifier::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 
 void Identifier::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
 {
-
+	std::cout << "Identifier '" << m_rName << "' Visited" << std::endl;
 }
