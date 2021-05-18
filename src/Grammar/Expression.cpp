@@ -23,6 +23,7 @@ namespace
 			{
 				return m_fnAction(pEvaluable1, pEvaluable2);
 			}
+
 			std::cerr << "Failed to eval an expression!" << std::endl;
 			return -1;
 		}

@@ -108,7 +108,10 @@ namespace
 
 		void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override
 		{
-			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+			pVisitor->AddToResult("if (");
+			pVisitor->Visit(m_pExpression);
+			pVisitor->AddToResult(")\n\t");
+			pVisitor->Visit(m_pStatement);
 		}
 
 		template<class V> void GenericAccept(const V& pVisitor)
@@ -138,7 +141,12 @@ namespace
 
 		void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override
 		{
-			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+			pVisitor->AddToResult("if (");
+			pVisitor->Visit(m_pExpression);
+			pVisitor->AddToResult(")\n\t");
+			pVisitor->Visit(m_pIfStatement);
+			pVisitor->AddToResult(")\nelse\n\t");
+			pVisitor->Visit(m_pElseStatement);
 		}
 
 		template<class V> void GenericAccept(const V& pVisitor)
@@ -170,7 +178,10 @@ namespace
 
 		void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override
 		{
-			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+			pVisitor->AddToResult("while (");
+			pVisitor->Visit(m_pExpression);
+			pVisitor->AddToResult(")\n\t");
+			pVisitor->Visit(m_pStatement);
 		}
 
 		template<class V> void GenericAccept(const V& pVisitor)
@@ -199,7 +210,9 @@ namespace
 
 		void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override
 		{
+			pVisitor->AddToResult("std::cout << ");
 			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+			pVisitor->AddToResult(" << std::endl;\n");
 		}
 
 		template<class V> void GenericAccept(const V& pVisitor)
@@ -225,7 +238,9 @@ namespace
 
 		void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override
 		{
+			pVisitor->AddToResult("return ");
 			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+			pVisitor->AddToResult("n");
 		}
 
 		template<class V> void GenericAccept(const V& pVisitor)
