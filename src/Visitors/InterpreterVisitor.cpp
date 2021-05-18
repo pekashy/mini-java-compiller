@@ -127,18 +127,18 @@ void InterpreterVisitor::AddToResult(const std::string& rPart)
 		return;
 	}
 
-	m_rInterpreterResult += rPart;
+	m_interpretRes << rPart;
 }
 
 InterpreterVisitor::InterpreterVisitor()
 	: m_bInterpretationLocked(false)
 {
-	m_rInterpreterResult = "int main() {\n";
+	m_interpretRes << "int main() {\n";
 }
 
 std::string InterpreterVisitor::GetInterpreterResult() const
 {
-	return m_rInterpreterResult + "}";
+	return m_interpretRes.str() + "}";
 }
 
 void InterpreterVisitor::LockInterpretation()

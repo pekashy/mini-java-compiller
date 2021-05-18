@@ -10,15 +10,16 @@ class MainClassDeclaration : public GrammarNode
 {
  public:
 	using Ptr = std::shared_ptr<MainClassDeclaration>;
-	static Ptr Create(const std::shared_ptr<Statement>& pStatement, const std::shared_ptr<Identifier>& pClassName);
+	static Ptr Create(const std::shared_ptr<Chain<Statement>>& pStatements, const std::shared_ptr<Identifier>& pClassName);
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
  private:
-	MainClassDeclaration(const std::shared_ptr<Statement>& pMainClassStatement, const std::shared_ptr<Identifier>& pMainClassName);
+	MainClassDeclaration(const std::shared_ptr<Chain<Statement>>& pMainClassStatement,
+		const std::shared_ptr<Identifier>& pMainClassName);
 
 	template<class V> void GenericAccept(const V& pVisitor);
 
-	std::shared_ptr<Statement> m_pMainClassStatement;
+	std::shared_ptr<Chain<Statement>> m_pMainClassStatements;
 	std::shared_ptr<Identifier> m_pMainClassName;
 };
 

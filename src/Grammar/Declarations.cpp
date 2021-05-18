@@ -141,6 +141,7 @@ void VariableDeclaration::Accept(const std::shared_ptr<PrintVisitor>& pVisitor)
 void VariableDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 {
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+	pVisitor->AddToResult(";\n");
 }
 
 template<class V> void VariableDeclaration::GenericAccept(const V& pVisitor)

@@ -2,7 +2,8 @@
 #include "Visitor.h"
 
 #include <boost/core/noncopyable.hpp>
-
+#include <sstream>
+\
 class Interpretable
 {
  public:
@@ -44,7 +45,7 @@ class InterpreterVisitor : public Visitor, public std::enable_shared_from_this<I
 	void UnlockInterpretation();
  private:
 	InterpreterVisitor();
-	std::string m_rInterpreterResult;
+	std::stringstream m_interpretRes;
 	bool m_bInterpretationLocked;
 };
 

@@ -145,7 +145,7 @@ program:
 
 
 mainClass:
-	  CLASS identifier "{" PUBLIC STATIC VOID MAIN "(" ")" "{" statement "}" "}" { $$ = MainClassDeclaration::Create($11, $2); }
+	  CLASS identifier "{" PUBLIC STATIC VOID MAIN "(" ")" "{" statements "}" "}" { $$ = MainClassDeclaration::Create($11, $2); }
 
 
 classDeclaration:

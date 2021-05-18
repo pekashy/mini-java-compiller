@@ -51,8 +51,8 @@ public:
     {
         if (!m_bEmpty)
         {
-            pVisitor->Visit(m_pContent);
-            m_pNext->Accept(pVisitor);
+			m_pNext->Accept(pVisitor);
+			pVisitor->Visit(m_pContent);
         }
     }
 

@@ -1,5 +1,6 @@
 class Factorial {
   public static void main () {
+    int num_aux;
     assert(false);
   }
 }

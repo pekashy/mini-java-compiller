@@ -30,6 +30,18 @@ void SimpleType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 
 void SimpleType::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
 {
+	std::string typenm;
+	switch(m_eIdentKW)
+	{
+	case Types::Int:
+		typenm = "int";
+		break;
+	case Types::Boolean:
+		typenm = "bool";
+		break;
+	}
+	pVisitor->AddToResult(typenm + " ");
+	InterpretationLocker locker(pVisitor);
     GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
 }
 

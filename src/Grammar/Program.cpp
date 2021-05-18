@@ -6,13 +6,13 @@
 #include <Grammar/Declarations.h>
 
 
-MainClassDeclaration::Ptr MainClassDeclaration::Create(const Statement::Ptr& pStatement, const Identifier::Ptr& pClassName)
+MainClassDeclaration::Ptr MainClassDeclaration::Create(const std::shared_ptr<Chain<Statement>>& pStatements, const Identifier::Ptr& pClassName)
 {
-	return std::shared_ptr<MainClassDeclaration>(new MainClassDeclaration(pStatement, pClassName));
+	return std::shared_ptr<MainClassDeclaration>(new MainClassDeclaration(pStatements, pClassName));
 }
 
-MainClassDeclaration::MainClassDeclaration(const Statement::Ptr& pStatement, const Identifier::Ptr& pMainClassName)
-	: m_pMainClassStatement(pStatement), m_pMainClassName(pMainClassName)
+MainClassDeclaration::MainClassDeclaration(const std::shared_ptr<Chain<Statement>>& pStatements, const Identifier::Ptr& pMainClassName)
+	: m_pMainClassStatements(pStatements), m_pMainClassName(pMainClassName)
 {
 
 }
@@ -33,7 +33,7 @@ void MainClassDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVi
 
 template<class V> void MainClassDeclaration::GenericAccept(const V& pVisitor)
 {
-	pVisitor->Visit(m_pMainClassStatement);
+	m_pMainClassStatements->Accept(pVisitor);
 }
 
 Program::Ptr Program::Create(const MainClassDeclaration::Ptr& pMainClass, const Chain<ClassDeclaration>::Ptr& pClassDeclarations)
