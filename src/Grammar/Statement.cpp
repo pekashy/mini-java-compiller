@@ -253,13 +253,16 @@ namespace
 
 		void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override
 		{
-			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+			pVisitor->Visit(m_pLvalue);
+			pVisitor->AddToResult(" = ");
+			pVisitor->Visit(m_pExpression);
+			pVisitor->AddToResult(";\n");
 		}
 
 		template<class V> void GenericAccept(const V& pVisitor)
 		{
-			pVisitor->Visit(m_pExpression);
 			pVisitor->Visit(m_pLvalue);
+			pVisitor->Visit(m_pExpression);
 		}
 
 	 private:

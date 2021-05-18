@@ -6,7 +6,6 @@ class PrintVisitor : public Visitor, public std::enable_shared_from_this<PrintVi
  public:
 	using Ptr = std::shared_ptr<PrintVisitor>;
 	static PrintVisitor::Ptr Create();
-	void Visit(const std::shared_ptr<Assignment>& pNode) override;
 	void Visit(const std::shared_ptr<BooleanExpression>& pNode) override;
 	void Visit(const std::shared_ptr<Program>& pNode) override;
 	void Visit(const std::shared_ptr<Lvalue>& pNode) override;

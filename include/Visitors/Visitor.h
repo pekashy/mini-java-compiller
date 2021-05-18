@@ -3,7 +3,6 @@
 #include <memory>
 #include <string>
 
-class Assignment;
 class Expression;
 class BooleanExpression;
 class GrammarNode;
@@ -33,7 +32,6 @@ class Visitor
  public:
 	virtual ~Visitor() = default;
 	virtual void Visit(const std::shared_ptr<Expression>& pNode) = 0;
-	virtual void Visit(const std::shared_ptr<Assignment>& pNode) = 0;
 	virtual void Visit(const std::shared_ptr<BooleanExpression>& pNode) = 0;
 	virtual void Visit(const std::shared_ptr<Program>& pNode) = 0;
 	virtual void Visit(const std::shared_ptr<Lvalue>& pNode) = 0;

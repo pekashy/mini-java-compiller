@@ -9,7 +9,6 @@
 %code requires {
     #include <string>
     #include <memory>
-    class Assignment;
     class Expression;
     class BooleanExpression;
     class GrammarNode;
@@ -50,7 +49,6 @@
     #include <Grammar/Invocation.h>
     #include <Grammar/Declarations.h>
     #include <Grammar/Expression.h>
-    #include <Grammar/Assignment.h>
     #include <Grammar/Types.h>
     #include <Grammar/Identifier.h>
     #include <Grammar/Statement.h>

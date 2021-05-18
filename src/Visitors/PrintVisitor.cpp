@@ -1,6 +1,5 @@
 #include <Visitors/Visitor.h>
 #include <Grammar/Expression.h>
-#include <Grammar/Assignment.h>
 #include <Grammar/Program.h>
 #include <Grammar/Lvalue.h>
 #include <Grammar/Invocation.h>
@@ -13,11 +12,6 @@
 PrintVisitor::Ptr PrintVisitor::Create()
 {
 	return std::shared_ptr<PrintVisitor>(new PrintVisitor());
-}
-
-void PrintVisitor::Visit(const std::shared_ptr<Assignment>& pNode)
-{
-	pNode->Accept(shared_from_this());
 }
 
 void PrintVisitor::Visit(const std::shared_ptr<BooleanExpression>& pNode)

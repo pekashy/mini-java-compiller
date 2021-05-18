@@ -1,14 +1,13 @@
-#include "include/Visitors/Visitor.h"
+#include <Visitors/Visitor.h>
 
-#include "include/Grammar/Expression.h"
-#include "include/Grammar/Assignment.h"
-#include "include/Grammar/Program.h"
-#include "include/Grammar/Lvalue.h"
-#include "include/Grammar/Invocation.h"
-#include "include/Grammar/Declarations.h"
-#include "include/Grammar/Types.h"
-#include "include/Grammar/Identifier.h"
-#include "include/Grammar/Statement.h"
+#include <Grammar/Expression.h>
+#include <Grammar/Program.h>
+#include <Grammar/Lvalue.h>
+#include <Grammar/Invocation.h>
+#include <Grammar/Declarations.h>
+#include <Grammar/Types.h>
+#include <Grammar/Identifier.h>
+#include <Grammar/Statement.h>
 
 #include <iostream>
 #include <Visitors/InterpreterVisitor.h>
@@ -19,11 +18,6 @@ InterpreterVisitor::Ptr InterpreterVisitor::Create()
 }
 
 void InterpreterVisitor::Visit(const std::shared_ptr<Expression>& pNode)
-{
-	pNode->Accept(shared_from_this());
-}
-
-void InterpreterVisitor::Visit(const std::shared_ptr<Assignment>& pNode)
 {
 	pNode->Accept(shared_from_this());
 }

@@ -9,7 +9,7 @@ class Interpretable
  public:
 	virtual ~Interpretable() = default;
  protected:
-	virtual std::string GetInterpretation() const = 0;
+	[[nodiscard]] virtual std::string GetInterpretation() const = 0;
 };
 
 
@@ -18,7 +18,6 @@ class InterpreterVisitor : public Visitor, public std::enable_shared_from_this<I
  public:
 	using Ptr = std::shared_ptr<InterpreterVisitor>;
 	static InterpreterVisitor::Ptr Create();
-	void Visit(const std::shared_ptr<Assignment>& pNode) override;
 	void Visit(const std::shared_ptr<BooleanExpression>& pNode) override;
 	void Visit(const std::shared_ptr<Program>& pNode) override;
 	void Visit(const std::shared_ptr<Lvalue>& pNode) override;
