@@ -24,7 +24,9 @@ namespace
 
 		void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override
 		{
+			pVisitor->AddToResult("assert(");
 			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+			pVisitor->AddToResult(");\n");
 		}
 
 		template<class V> void GenericAccept(const V& pVisitor)

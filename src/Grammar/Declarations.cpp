@@ -100,11 +100,18 @@ void MethodDeclaration::Accept(const std::shared_ptr<PrintVisitor>& pVisitor)
 {
 	std::cout << "Method Declaration Visited" << std::endl;
 	GenericAccept<PrintVisitor::Ptr>(pVisitor);
+	pVisitor->Visit(m_pIdentifier);
+	pVisitor->Visit(m_pFormals);
+	pVisitor->Visit(m_pReturnType);
 }
 
 void MethodDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 {
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+	InterpretationLocker locker(pVisitor);
+	pVisitor->Visit(m_pIdentifier);
+	pVisitor->Visit(m_pFormals);
+	pVisitor->Visit(m_pReturnType);
 }
 
 template<class V> void MethodDeclaration::GenericAccept(const V& pVisitor)
@@ -113,8 +120,6 @@ template<class V> void MethodDeclaration::GenericAccept(const V& pVisitor)
 	{
 		m_pStatements->Accept(pVisitor);
 	}
-	pVisitor->Visit(m_pFormals);
-	pVisitor->Visit(m_pReturnType);
 }
 
 VariableDeclaration::Ptr VariableDeclaration::Create(const Type::Ptr& pType, const Identifier::Ptr& pIdentifier)

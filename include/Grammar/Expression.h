@@ -9,6 +9,22 @@ class Type;
 class MethodInvocation;
 class FieldInvocation;
 
+
+
+class Evaluable : public Interpretable
+{
+ public:
+	using Ptr = std::shared_ptr<Evaluable>;
+	[[nodiscard]] virtual int Eval() const = 0;
+	virtual ~Evaluable() = default;
+
+ protected:
+	std::string GetInterpretation() const override
+	{
+		return std::to_string(Eval());
+	}
+};
+
 class Expression : public GrammarNode
 {
  public:
@@ -26,12 +42,10 @@ class Expression : public GrammarNode
 	Expression() = default;
 };
 
-class ArythmExpression : public Expression
+class ArythmExpression : public Expression, public Evaluable
 {
  public:
 	using Ptr = std::shared_ptr<ArythmExpression>;
-
-	virtual int Eval() const = 0;
 
 	static Ptr CreateAddExpression(const Expression::Ptr& pE1, const Expression::Ptr& pE2);
 	static Ptr CreateSubstractExpression(const Expression::Ptr& pE1, const Expression::Ptr& pE2);
@@ -42,12 +56,10 @@ class ArythmExpression : public Expression
 	virtual ~ArythmExpression() = default;
 };
 
-class BooleanExpression : public Expression
+class BooleanExpression : public Expression, public Evaluable
 {
  public:
 	using Ptr = std::shared_ptr<BooleanExpression>;
-
-	virtual bool Eval() const = 0;
 
 	static Ptr CreateInverseExpression(const Expression::Ptr& pExpression);
 	static Ptr CreateComparasmentExpression(const Expression::Ptr& pExpression1, std::string action, const Expression::Ptr& pExpression2);

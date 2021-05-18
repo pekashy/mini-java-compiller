@@ -1,6 +1,5 @@
 #include "include/Visitors/Visitor.h"
 
-#include "Grammar/GrammarNode.h"
 #include "include/Grammar/Expression.h"
 #include "include/Grammar/Assignment.h"
 #include "include/Grammar/Program.h"
@@ -12,7 +11,7 @@
 #include "include/Grammar/Statement.h"
 
 #include <iostream>
-
+#include <Visitors/InterpreterVisitor.h>
 
 InterpreterVisitor::Ptr InterpreterVisitor::Create()
 {
@@ -21,7 +20,6 @@ InterpreterVisitor::Ptr InterpreterVisitor::Create()
 
 void InterpreterVisitor::Visit(const std::shared_ptr<Expression>& pNode)
 {
-	std::cout << "Interpreting expression: ";
 	pNode->Accept(shared_from_this());
 }
 
@@ -32,7 +30,6 @@ void InterpreterVisitor::Visit(const std::shared_ptr<Assignment>& pNode)
 
 void InterpreterVisitor::Visit(const std::shared_ptr<BooleanExpression>& pNode)
 {
-	std::cout << "Interpreting expression: ";
 	pNode->Accept(shared_from_this());
 }
 
@@ -48,11 +45,13 @@ void InterpreterVisitor::Visit(const std::shared_ptr<Lvalue>& pNode)
 }
 void InterpreterVisitor::Visit(const std::shared_ptr<FieldInvocation>& pNode)
 {
+	InterpretationLocker locker(shared_from_this());
 	pNode->Accept(shared_from_this());
 }
 
 void InterpreterVisitor::Visit(const std::shared_ptr<ClassDeclaration>& pNode)
 {
+	InterpretationLocker locker(shared_from_this()); // as we do only for main function in main class
 	pNode->Accept(shared_from_this());
 }
 
@@ -75,7 +74,6 @@ void InterpreterVisitor::Visit(const std::shared_ptr<SimpleType>& pNode)
 void InterpreterVisitor::Visit(const std::shared_ptr<ArrayType>& pNode)
 {
 	pNode->Accept(shared_from_this());
-
 }
 
 void InterpreterVisitor::Visit(const std::shared_ptr<Identifier>& pNode)
@@ -98,11 +96,11 @@ void InterpreterVisitor::Visit(const std::shared_ptr<Formal>& pNode)
 void InterpreterVisitor::Visit(const std::shared_ptr<Statement>& pNode)
 {
 	pNode->Accept(shared_from_this());
-
 }
 
 void InterpreterVisitor::Visit(const std::shared_ptr<MethodInvocation>& pNode)
 {
+	InterpretationLocker locker(shared_from_this());
 	pNode->Accept(shared_from_this());
 }
 
@@ -119,4 +117,49 @@ void InterpreterVisitor::Visit(const std::shared_ptr<MethodDeclaration>& pNode)
 void InterpreterVisitor::Visit(const std::shared_ptr<Type>& pNode)
 {
 	pNode->Accept(shared_from_this());
+}
+
+
+void InterpreterVisitor::AddToResult(const std::string& rPart)
+{
+	if (m_bInterpretationLocked)
+	{
+		return;
+	}
+
+	m_rInterpreterResult += rPart;
+}
+
+InterpreterVisitor::InterpreterVisitor()
+	: m_bInterpretationLocked(false)
+{
+	m_rInterpreterResult = "int main() {\n";
+}
+
+std::string InterpreterVisitor::GetInterpreterResult() const
+{
+	return m_rInterpreterResult + "}";
+}
+
+void InterpreterVisitor::LockInterpretation()
+{
+	m_bInterpretationLocked = true;
+}
+
+void InterpreterVisitor::UnlockInterpretation()
+{
+	m_bInterpretationLocked = false;
+}
+
+
+InterpretationLocker::InterpretationLocker(const InterpreterVisitor::Ptr& pVisitor)
+	: m_pVisitor(pVisitor)
+{
+	m_pVisitor->LockInterpretation();
+}
+
+
+InterpretationLocker::~InterpretationLocker()
+{
+	m_pVisitor->UnlockInterpretation();
 }

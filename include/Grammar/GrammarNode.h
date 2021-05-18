@@ -1,6 +1,8 @@
 #pragma once
 
-#include <Visitors/Visitor.h>
+#include <Visitors/PrintVisitor.h>
+#include <Visitors/InterpreterVisitor.h>
+
 #include <memory>
 
 class GrammarNode
@@ -9,8 +11,7 @@ public:
     using Ptr = std::shared_ptr<GrammarNode>;
     virtual void
     Accept(const std::shared_ptr<PrintVisitor> &pVisitor) = 0;
-    virtual void
-    Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) = 0;
+    virtual void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) = 0;
 
     virtual ~GrammarNode() = default;
 };

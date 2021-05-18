@@ -30,4 +30,8 @@ include_directories(include)
 add_subdirectory(src)
 add_executable(MiniJavaCompiler main.cpp)
 add_dependencies(MiniJavaCompiler Driver Generated)
+target_link_libraries(
+        MiniJavaCompiler
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+)
 target_link_libraries(MiniJavaCompiler Driver Generated)

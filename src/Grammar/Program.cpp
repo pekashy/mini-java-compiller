@@ -21,17 +21,19 @@ void MainClassDeclaration::Accept(const std::shared_ptr<PrintVisitor>& pVisitor)
 {
 	std::cout << "Main class Visited" << std::endl;
 	GenericAccept<PrintVisitor::Ptr>(pVisitor);
+	pVisitor->Visit(m_pMainClassName);
 }
 
 void MainClassDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 {
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+	InterpretationLocker locker(pVisitor);
+	pVisitor->Visit(m_pMainClassName);
 }
 
 template<class V> void MainClassDeclaration::GenericAccept(const V& pVisitor)
 {
 	pVisitor->Visit(m_pMainClassStatement);
-	pVisitor->Visit(m_pMainClassName);
 }
 
 Program::Ptr Program::Create(const MainClassDeclaration::Ptr& pMainClass, const Chain<ClassDeclaration>::Ptr& pClassDeclarations)

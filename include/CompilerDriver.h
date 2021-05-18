@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Scanner.h"
-#include <Visitors/Visitor.h>
+
+#include <Visitors/PrintVisitor.h>
+#include <Visitors/InterpreterVisitor.h>
 
 #include <memory>
 

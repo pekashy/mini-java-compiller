@@ -35,4 +35,5 @@ int main(int argc, char** argv)
 	pDriver->StartVisitor(printVisitor);*/
 	auto iVisitor = InterpreterVisitor::Create();
 	pDriver->StartVisitor(iVisitor);
+	std::cout << iVisitor->GetInterpreterResult() << std::endl;
 }
