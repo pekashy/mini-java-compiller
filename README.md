@@ -25,3 +25,17 @@ class Fac {
   }
 }
 ```
+- Added several visitors, interpriets programs like the simplified one:
+```
+class Factorial {
+  public static void main () {
+    int num_aux;
+    assert(false);
+    num_aux = 1;
+    if ( 1 == 1)
+        num_aux = 2;
+    while(1)
+        System.out.println(num_aux);
+  }
+}
+```
