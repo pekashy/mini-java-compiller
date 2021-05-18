@@ -1,43 +1,37 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.19.8)
 project(MiniJava)
 
+set(CMAKE_CXX_STANDARD 17)
+set(MAIN_SOURCE main.cpp)
+include_directories(${PROJECT_SOURCE_DIR})
+file(MAKE_DIRECTORY include/FlexBisonOutput)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
-set(CMAKE_CXX_STANDARD 17)
-file(MAKE_DIRECTORY FlexBisonOutput)
-set(
-        HEADERS
-        CompilerDriver.h
-)
 
 BISON_TARGET(
         MiniJavaParser
-        parser.y
-        ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput/parser.cpp
-        DEFINES_FILE ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput/parser.hh
+        src/parser.y
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/FlexBisonOutput/parser.cpp
+        DEFINES_FILE ${CMAKE_CURRENT_SOURCE_DIR}/include/FlexBisonOutput/parser.hh
 )
 
 FLEX_TARGET(
         MiniJavaScanner
-        Scanner.l
-        ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput/Scanner.cpp
+        src/Scanner.l
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/FlexBisonOutput/Scanner.cpp
 )
 
 ADD_FLEX_BISON_DEPENDENCY(MiniJavaScanner MiniJavaParser)
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/FlexBisonOutput)
 
-add_executable(
-        MiniJavaParser
-        main.cpp
-        FlexBisonOutput/parser.hh FlexBisonOutput/parser.cpp
-        FlexBisonOutput/Scanner.cpp
-        CompilerDriver.cpp CompilerDriver.h
-        Grammar/Rules/Assignment.cpp
-        Grammar/Rules/AssignmentList.cpp
-        Scanner.h Location.cpp Location.h ScannerImpl.cpp
-        Grammar/Rules/Statement.cpp Grammar/Rules/Statement.h Grammar/Visitor.cpp
-        Grammar/Visitor.h Grammar/GrammarNode.cpp Grammar/GrammarNode.h
-        Grammar/Rules/Lvalue.cpp Grammar/Rules/Lvalue.h Grammar/Rules/Identifier.cpp Grammar/Rules/Identifier.h
-        Grammar/Rules/Invocation.cpp Grammar/Rules/Invocation.h Grammar/Rules/Expression.cpp Grammar/Rules/Types.cpp Grammar/Rules/Types.h Grammar/Rules/Declarations.cpp Grammar/Rules/Declarations.h Grammar/Rules/Program.cpp Grammar/Rules/Program.h)
+add_library(Generated include/FlexBisonOutput/parser.hh include/FlexBisonOutput/location.hh
+        include/FlexBisonOutput/parser.cpp include/FlexBisonOutput/Scanner.cpp)
 
-
+include_directories(include)
+add_subdirectory(src)
+add_executable(MiniJavaCompiler main.cpp)
+add_dependencies(MiniJavaCompiler Driver Generated)
+target_link_libraries(
+        MiniJavaCompiler
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+)
+target_link_libraries(MiniJavaCompiler Driver Generated)
