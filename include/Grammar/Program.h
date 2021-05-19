@@ -13,6 +13,7 @@ class MainClassDeclaration : public GrammarNode
 	static Ptr Create(const std::shared_ptr<Chain<Statement>>& pStatements, const std::shared_ptr<Identifier>& pClassName);
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
  private:
 	MainClassDeclaration(const std::shared_ptr<Chain<Statement>>& pMainClassStatement,
 		const std::shared_ptr<Identifier>& pMainClassName);
@@ -30,6 +31,7 @@ class Program : public GrammarNode
 	static Ptr Create(const MainClassDeclaration::Ptr& pMainClass, const Chain<ClassDeclaration>::Ptr& pClassDeclarations);
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
  private:
 	Program(const MainClassDeclaration::Ptr& pMainClass, const Chain<ClassDeclaration>::Ptr& pClassDeclarations);
 

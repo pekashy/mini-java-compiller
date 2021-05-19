@@ -22,11 +22,13 @@ SimpleType::SimpleType(Types eIdentKW)
 SimpleType::SimpleType(const Identifier::Ptr &pIdentifier)
     : m_pIdentifier(pIdentifier) {}
 
+
 void SimpleType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "SimpleType '" << static_cast<int>(m_eIdentKW) << "' Visited" << std::endl;
     GenericAccept<PrintVisitor::Ptr>(pVisitor);
 }
+
 
 void SimpleType::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
 {
@@ -54,6 +56,11 @@ void SimpleType::GenericAccept(const V &pVisitor)
     }
 }
 
+void SimpleType::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+}
+
 ArrayType::Ptr ArrayType::Create(const SimpleType::Ptr &pType)
 {
     return std::shared_ptr<ArrayType>(new ArrayType(pType));
@@ -71,6 +78,11 @@ void ArrayType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 void ArrayType::Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor)
 {
     GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+void ArrayType::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
 }
 
 template<class V>

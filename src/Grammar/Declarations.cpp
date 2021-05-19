@@ -37,6 +37,12 @@ void Formal::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
 }
 
+void Formal::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+}
+
+
 template<class V> void Formal::GenericAccept(const V& pVisitor)
 {
 	pVisitor->Visit(m_pType);
@@ -66,6 +72,11 @@ void Formals::Accept(const std::shared_ptr<PrintVisitor>& pVisitor)
 void Formals::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 {
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
+}
+
+void Formals::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
 }
 
 template<class V> void Formals::GenericAccept(const V& pVisitor)
@@ -114,6 +125,15 @@ void MethodDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVisit
 	pVisitor->Visit(m_pReturnType);
 }
 
+void MethodDeclaration::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+	pVisitor->Visit(m_pIdentifier);
+	pVisitor->Visit(m_pFormals);
+	pVisitor->Visit(m_pReturnType);
+}
+
+
 template<class V> void MethodDeclaration::GenericAccept(const V& pVisitor)
 {
 	if (m_pStatements)
@@ -142,6 +162,11 @@ void VariableDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVis
 {
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
 	pVisitor->AddToResult(";\n");
+}
+
+void VariableDeclaration::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
 }
 
 template<class V> void VariableDeclaration::GenericAccept(const V& pVisitor)
@@ -180,6 +205,12 @@ void ClassDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVisito
 {
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
 }
+
+void ClassDeclaration::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+}
+
 
 template<class V> void ClassDeclaration::GenericAccept(const V& pVisitor)
 {

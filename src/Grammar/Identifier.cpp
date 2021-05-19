@@ -21,3 +21,7 @@ void Identifier::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 {
 	pVisitor->AddToResult(m_rName);
 }
+
+void Identifier::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+}

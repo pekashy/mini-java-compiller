@@ -15,7 +15,8 @@ public:
     static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
     void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
     void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
-private:
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
+ private:
     Formal(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
     template<class V>
     void GenericAccept(const V& pVisitor);
@@ -33,6 +34,7 @@ public:
     static Ptr Create();
     void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
     void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
 protected:
     Formals(const Formals::Ptr& pLine, const Formal::Ptr& pContent);
     template<class V>
@@ -63,6 +65,7 @@ public:
 
     void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
     void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
 protected:
     ClassDeclaration(const std::shared_ptr<Identifier>& pClassId, const std::shared_ptr<Identifier>& pParentClassId,
                      const Declaration::Ptr& pDeclaration);
@@ -85,6 +88,7 @@ public:
                       const Chain<Statement>::Ptr& pStatements, const Formals::Ptr& pFormals);
     void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
     void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
 private:
     MethodDeclaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier,
                          const Chain<Statement>::Ptr& pStatements, const Formals::Ptr& pFormals);
@@ -104,6 +108,7 @@ public:
     static Ptr Create(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
     void Accept(const std::shared_ptr<PrintVisitor> &pVisitor) override;
     void Accept(const std::shared_ptr<InterpreterVisitor> &pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
 private:
     VariableDeclaration(const std::shared_ptr<Type>& pType, const std::shared_ptr<Identifier>& pIdentifier);
     template<class V>

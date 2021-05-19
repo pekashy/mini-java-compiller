@@ -10,6 +10,7 @@ class Identifier : public GrammarNode
 	static Ptr Create(const std::string& rName);
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
  private:
 	explicit Identifier(const std::string& rName);
 	const std::string m_rName;

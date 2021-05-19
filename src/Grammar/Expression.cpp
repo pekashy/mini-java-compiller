@@ -41,7 +41,12 @@ namespace
 			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pFirst);
@@ -69,7 +74,12 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pIdent);
@@ -95,7 +105,12 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
         }
@@ -120,7 +135,12 @@ namespace
 			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
         }
@@ -154,7 +174,12 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pExpr);
@@ -183,7 +208,13 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pType);
@@ -216,7 +247,12 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pType);
@@ -245,7 +281,12 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pFieldInvocation);
@@ -276,7 +317,12 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pMethodInvocation);
@@ -311,7 +357,12 @@ namespace
             GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
         }
@@ -364,7 +415,13 @@ namespace
 			GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
         }
 
-        template<class V>
+		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+		{
+			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+		}
+
+
+		template<class V>
         void GenericAccept(const V& pVisitor)
         {
             pVisitor->Visit(m_pExpression1);
@@ -403,7 +460,12 @@ class InverseBooleanExpression: public BooleanExpression {
 		GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
     }
 
-    template<class V>
+	void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
+	{
+		GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+	}
+
+	template<class V>
     void GenericAccept(const V& pVisitor)
     {
         pVisitor->Visit(m_pExpression);

@@ -31,6 +31,12 @@ void MainClassDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVi
 	pVisitor->Visit(m_pMainClassName);
 }
 
+void MainClassDeclaration::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+}
+
+
 template<class V> void MainClassDeclaration::GenericAccept(const V& pVisitor)
 {
 	m_pMainClassStatements->Accept(pVisitor);
@@ -56,6 +62,12 @@ void Program::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 {
 	GenericAccept<InterpreterVisitor::Ptr>(pVisitor);
 }
+
+void Program::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
+{
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+}
+
 
 template<class V> void Program::GenericAccept(const V& pVisitor)
 {

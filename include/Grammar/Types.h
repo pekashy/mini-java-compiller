@@ -28,6 +28,7 @@ class SimpleType : public Type
 	static Ptr Create(const std::shared_ptr<Identifier>& pIdentifier);
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
  private:
 	explicit SimpleType(Types m_eIdentKW);
 	explicit SimpleType(const std::shared_ptr<Identifier>& pIdentifier);
@@ -45,6 +46,7 @@ class ArrayType : public Type
 	static Ptr Create(const SimpleType::Ptr& m_pType);
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
+	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
  private:
 	explicit ArrayType(const SimpleType::Ptr& m_pType);
 
