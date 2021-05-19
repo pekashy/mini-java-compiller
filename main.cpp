@@ -1,5 +1,6 @@
 #include <CompilerDriver.h>
 #include <Visitors/Visitor.h>
+#include <Visitors/SymbolTableVisitor.h>
 #include <iostream>
 
 int main(int argc, char** argv)
@@ -34,6 +35,7 @@ int main(int argc, char** argv)
 	/*auto printVisitor = PrintVisitor::Create();
 	pDriver->StartVisitor(printVisitor);*/
 	auto iVisitor = InterpreterVisitor::Create();
+	auto stVisitor = SymbolTableVisitor::Create();
 	pDriver->StartVisitor(iVisitor);
 	std::cout << iVisitor->GetInterpreterResult() << std::endl;
 }

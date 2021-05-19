@@ -3,7 +3,7 @@
 
 #include <boost/core/noncopyable.hpp>
 #include <sstream>
-\
+
 class Interpretable
 {
  public:

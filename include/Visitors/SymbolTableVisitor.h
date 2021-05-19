@@ -1,6 +1,8 @@
 #pragma once
 #include "Visitor.h"
 
+#include <SymbolTree/ScopeTree.h>
+
 class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<SymbolTableVisitor>
 {
  public:
@@ -26,4 +28,5 @@ class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<S
 	void Visit(const std::shared_ptr<Type>& pNode) override;
  private:
 	SymbolTableVisitor() = default;
+	ScopeTree scopeTree;
 };
