@@ -35,3 +35,12 @@ target_link_libraries(
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
 )
 target_link_libraries(MiniJavaCompiler Driver Generated)
+
+# Setting Up GTest
+enable_testing()
+find_package(GTest REQUIRED)
+include_directories(${GTest_SOURCE_DIR}/include ${GTest_SOURCE_DIR})
+add_executable(MiniJavaCompilerTest test/tests.cpp)
+add_dependencies(MiniJavaCompilerTest Driver Generated)
+target_link_libraries(MiniJavaCompilerTest Driver Generated)
+target_link_libraries(MiniJavaCompilerTest gtest gtest_main pthread)
