@@ -47,7 +47,6 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<FieldInvocation>& pNode)
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<ClassDeclaration>& pNode)
 {
-	ScopeIncrementer autoScopeManager(shared_from_this());
 	pNode->Accept(shared_from_this());
 }
 
@@ -149,7 +148,7 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<MethodDeclaration>& pNode)
 		pVarObj->SetCorrespondingScope(m_pCurrentScope);
 		m_methodArgStack.pop();
 	}
-	pParentScope->DeclareSymbol(methodName, pMethObject);
+	pParentScope->DeclareSymbol(methodName, pMethObject); // Method belongs to parent scope!
 	pMethObject->SetCorrespondingScope(pParentScope);
 	m_methodNameStack.pop();
 	m_methodRetValueStack.pop();
@@ -165,6 +164,12 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<Type>& pNode)
 	pNode->Accept(shared_from_this());
 }
 
+void SymbolTableVisitor::AddClassObject(const ClassObject::Ptr& pClass)
+{
+	m_pCurrentScope->DeclareSymbol(pClass->GetName(), pClass);
+	pClass->SetCorrespondingScope(m_pCurrentScope);
+}
+
 void SymbolTableVisitor::AddVarType(const std::string& varType)
 {
 	m_varTypeStack.push(varType);
@@ -174,8 +179,6 @@ void SymbolTableVisitor::AddVarName(const std::string& varName)
 {
 	m_varNameStack.push(varName);
 }
-
-
 
 void SymbolTableVisitor::EnterNewScope()
 {

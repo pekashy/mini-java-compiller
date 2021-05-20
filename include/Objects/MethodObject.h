@@ -10,25 +10,11 @@ class MethodObject : public Object
  public:
 	using Ptr = std::shared_ptr<MethodObject>;
 
-	ObjectType GetType() const override
-	{
-		return ObjectType::Method;
-	}
-
-	static Ptr Create(const std::string& retValue, const std::string& methodName)
-	{
-		return Ptr(new MethodObject(retValue, methodName));
-	}
-
-	void AddArg(const std::shared_ptr<VariableObject>& pArg)
-	{
-		m_argList.push_back(pArg);
-	}
-
+	[[nodiscard]] ObjectType GetType() const override;
+	static Ptr Create(const std::string& retValue, const std::string& methodName);
+	void AddArg(const std::shared_ptr<VariableObject>& pArg);
  private:
-	MethodObject(const std::string& retValue, const std::string& methodName)
-	: m_retValue(retValue), m_methodName(methodName)
-	{}
+	MethodObject(const std::string& retValue, const std::string& methodName);
 
 	std::string m_retValue;
 	std::string m_methodName;

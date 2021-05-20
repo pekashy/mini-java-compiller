@@ -10,23 +10,10 @@ class ClassObject : public Object
  public:
 	using Ptr = std::shared_ptr<ClassObject>;
 	static Ptr Create(const std::string& className);
-
-	ObjectType GetType() const override
-	{
-		return ObjectType::Class;
-	}
-
-
-	void AddMethod(const std::shared_ptr<MethodObject>& pMethod)
-	{
-		m_pMethods.push_back(pMethod);
-	}
-
-
-	void AddField(const std::shared_ptr<MethodObject>& pMethod)
-	{
-		m_pMethods.push_back(pMethod);
-	}
+	[[nodiscard]] ObjectType GetType() const override;
+	void AddMethod(const std::shared_ptr<MethodObject>& pMethod);
+	void AddField(const std::shared_ptr<MethodObject>& pMethod);
+	[[nodiscard]] std::string GetName() const;
 
 
  private:

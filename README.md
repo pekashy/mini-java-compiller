@@ -25,7 +25,7 @@ class Fac {
   }
 }
 ```
-- Added several visitors, interpriets programs like the simplified one:
+- Added several visitors, interprets programs like the simplified one:
 ```
 class Factorial {
   public static void main () {
@@ -40,4 +40,4 @@ class Factorial {
 }
 ```
 - Implemented Symbol table structure
-- In Progress: Symbol table visitors
+- Symbol Table Visitor

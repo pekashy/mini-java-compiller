@@ -10,6 +10,7 @@
 
 class Scope;
 class ScopeNode;
+class ClassObject;
 
 class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<SymbolTableVisitor>
 {
@@ -41,6 +42,7 @@ class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<S
 	void AddMethodReturnType(const std::string& type);
 	void AddMethodArg(const std::string& retType, const std::string& name);
 
+	void AddClassObject(const std::shared_ptr<ClassObject>& pClass);
 	void EnterNewScope();
 	void ExitCurrentScope();
 

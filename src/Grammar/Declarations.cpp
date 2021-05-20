@@ -4,6 +4,8 @@
 #include <Grammar/Identifier.h>
 #include <Grammar/Statement.h>
 
+#include <Objects/ClassObject.h>
+
 namespace
 {
 	class EmptyFormals : public Formals
@@ -214,7 +216,13 @@ void ClassDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVisito
 
 void ClassDeclaration::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
 {
-	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+	auto pClassObject = ClassObject::Create(m_pIdentifier->GetId());
+	pVisitor->AddClassObject(pClassObject);
+	ScopeIncrementer autoScopeManager(pVisitor);
+	if (m_pClassDeclarations)
+	{
+		m_pClassDeclarations->Accept(pVisitor);
+	}
 }
 
 
