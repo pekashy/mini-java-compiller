@@ -9,6 +9,8 @@
 #include <Grammar/Statement.h>
 
 #include <Objects/VariableObject.h>
+#include <Objects/MethodObject.h>
+#include <Objects/ClassObject.h>
 
 SymbolTableVisitor::Ptr SymbolTableVisitor::Create()
 {
@@ -51,7 +53,25 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<ClassDeclaration>& pNode)
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<Declaration>& pNode)
 {
-	pNode->Accept(shared_from_this());
+	auto pClassDeclaration = std::dynamic_pointer_cast<ClassDeclaration>(pNode);
+	auto pVarDeclaration = std::dynamic_pointer_cast<VariableDeclaration>(pNode);
+	auto pMethDeclaration = std::dynamic_pointer_cast<MethodDeclaration>(pNode);
+	if (pClassDeclaration)
+	{
+		Visit(pClassDeclaration);
+	}
+	else if (pVarDeclaration)
+	{
+		Visit(pVarDeclaration);
+	}
+	else if (pMethDeclaration)
+	{
+		Visit(pMethDeclaration);
+	}
+	else
+	{
+		pNode->Accept(shared_from_this());
+	}
 }
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<VariableDeclaration>& pNode)
@@ -100,6 +120,7 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<Statement>& pNode)
 void SymbolTableVisitor::Visit(const std::shared_ptr<MethodInvocation>& pNode)
 {
 	pNode->Accept(shared_from_this());
+
 }
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<MainClassDeclaration>& pNode)
@@ -110,7 +131,28 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<MainClassDeclaration>& pNod
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<MethodDeclaration>& pNode)
 {
+	auto pParentScope = m_pCurrentScope;
+	ScopeIncrementer autoScopeManager(shared_from_this()); // Current scope changed!
 	pNode->Accept(shared_from_this());
+
+	std::string methodName = m_methodNameStack.top();
+	std::string methodReturnType = m_methodRetValueStack.top();
+
+	auto pMethObject = MethodObject::Create(methodReturnType, methodName);
+
+	while(!m_methodArgStack.empty())
+	{
+		auto typeNamePair = m_methodArgStack.top();
+		auto pVarObj = VariableObject::Create(typeNamePair.first, typeNamePair.second);
+		pMethObject->AddArg(pVarObj);
+		m_pCurrentScope->DeclareSymbol(typeNamePair.second, pVarObj);
+		pVarObj->SetCorrespondingScope(m_pCurrentScope);
+		m_methodArgStack.pop();
+	}
+	pParentScope->DeclareSymbol(methodName, pMethObject);
+	pMethObject->SetCorrespondingScope(pParentScope);
+	m_methodNameStack.pop();
+	m_methodRetValueStack.pop();
 }
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<Expression>& pNode)
@@ -133,6 +175,8 @@ void SymbolTableVisitor::AddVarName(const std::string& varName)
 	m_varNameStack.push(varName);
 }
 
+
+
 void SymbolTableVisitor::EnterNewScope()
 {
 	auto newScopePtr = ScopeNode::Create(m_scopeStack.top());
@@ -144,12 +188,31 @@ void SymbolTableVisitor::ExitCurrentScope()
 {
 	if(m_scopeStack.size() < 2)
 	{
-		throw std::runtime_error("trying toexit main scope during execution!");
+		throw std::runtime_error("trying to exit main scope during execution!");
 	}
 
 	m_scopeStack.pop();
 	m_pCurrentScope = m_scopeStack.top()->Get();
 }
+
+
+void SymbolTableVisitor::AddMethodName(const std::string& name)
+{
+	m_methodNameStack.push(name);
+}
+
+
+void SymbolTableVisitor::AddMethodReturnType(const std::string& type)
+{
+	m_methodRetValueStack.push(type);
+}
+
+
+void SymbolTableVisitor::AddMethodArg(const std::string& retType, const std::string& name)
+{
+	m_methodArgStack.push({ retType, name });
+}
+
 
 ScopeIncrementer::ScopeIncrementer(const SymbolTableVisitor::Ptr& pVisitor)
 {

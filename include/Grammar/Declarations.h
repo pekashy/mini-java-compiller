@@ -7,7 +7,6 @@ class Identifier;
 class Statement;
 
 
-// TODO: vector of statements and types
 class Formal : public GrammarNode, std::enable_shared_from_this<Formal>
 {
 public:

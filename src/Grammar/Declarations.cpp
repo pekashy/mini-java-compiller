@@ -39,6 +39,7 @@ void Formal::Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor)
 
 void Formal::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
 {
+	pVisitor->AddMethodArg(m_pType->GetType(), m_pIdentifier->GetId());
 	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
 }
 
@@ -127,10 +128,13 @@ void MethodDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVisit
 
 void MethodDeclaration::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
 {
-	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+	pVisitor->AddMethodName(m_pIdentifier->GetId());
+	pVisitor->AddMethodReturnType(m_pReturnType->GetType());
+
 	pVisitor->Visit(m_pIdentifier);
 	pVisitor->Visit(m_pFormals);
 	pVisitor->Visit(m_pReturnType);
+	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
 }
 
 

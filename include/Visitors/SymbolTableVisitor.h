@@ -37,6 +37,10 @@ class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<S
 
 	void AddVarType(const std::string& varType);
 	void AddVarName(const std::string& varName);
+	void AddMethodName(const std::string& name);
+	void AddMethodReturnType(const std::string& type);
+	void AddMethodArg(const std::string& retType, const std::string& name);
+
 	void EnterNewScope();
 	void ExitCurrentScope();
 
