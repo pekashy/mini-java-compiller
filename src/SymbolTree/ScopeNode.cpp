@@ -33,9 +33,7 @@ std::shared_ptr<Scope> ScopeNode::Get() const
 
 ScopeNode::ScopeNode(const std::shared_ptr<ScopeNode>& pParentNode)
 	: m_pParentNode(pParentNode)
-{
-	m_pParentNode->AddChild(shared_from_this());
-}
+{}
 
 ScopeNode::ScopeNode()
 	: m_pParentNode(nullptr)
@@ -44,6 +42,10 @@ ScopeNode::ScopeNode()
 void ScopeNode::Init()
 {
 	m_pScope = Scope::Create(shared_from_this());
+	if(m_pParentNode)
+	{
+		m_pParentNode->AddChild(shared_from_this());
+	}
 }
 
 std::shared_ptr<const Scope> ScopeNode::FindScopeWhichContains(const Symbol& symbol) const

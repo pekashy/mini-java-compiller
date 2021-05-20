@@ -8,9 +8,6 @@
 #include <Grammar/Identifier.h>
 #include <Grammar/Statement.h>
 
-#include <SymbolTree/Scope.h>
-#include <SymbolTree/ScopeNode.h>
-
 #include <Objects/VariableObject.h>
 
 SymbolTableVisitor::Ptr SymbolTableVisitor::Create()
@@ -126,3 +123,41 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<Type>& pNode)
 	pNode->Accept(shared_from_this());
 }
 
+void SymbolTableVisitor::AddVarType(const std::string& varType)
+{
+	m_varTypeStack.push(varType);
+}
+
+void SymbolTableVisitor::AddVarName(const std::string& varName)
+{
+	m_varNameStack.push(varName);
+}
+
+void SymbolTableVisitor::EnterNewScope()
+{
+	auto newScopePtr = ScopeNode::Create(m_scopeStack.top());
+	m_scopeStack.push(newScopePtr);
+	m_pCurrentScope = newScopePtr->Get();
+}
+
+void SymbolTableVisitor::ExitCurrentScope()
+{
+	if(m_scopeStack.size() < 2)
+	{
+		throw std::runtime_error("trying toexit main scope during execution!");
+	}
+
+	m_scopeStack.pop();
+	m_pCurrentScope = m_scopeStack.top()->Get();
+}
+
+ScopeIncrementer::ScopeIncrementer(const SymbolTableVisitor::Ptr& pVisitor)
+{
+	m_pVisitor = pVisitor;
+	m_pVisitor->EnterNewScope();
+}
+
+ScopeIncrementer::~ScopeIncrementer()
+{
+	m_pVisitor->ExitCurrentScope();
+}
