@@ -1,16 +1,19 @@
 #include <SymbolTree/ScopeNode.h>
-
 #include <SymbolTree/Scope.h>
 
 
 std::shared_ptr<ScopeNode> ScopeNode::Create(const std::shared_ptr<ScopeNode>& pParentNode)
 {
-	return std::shared_ptr<ScopeNode>(new ScopeNode(pParentNode));
+	auto ptr = std::shared_ptr<ScopeNode>(new ScopeNode(pParentNode));
+	ptr->Init();
+	return ptr;
 }
 
 std::shared_ptr<ScopeNode> ScopeNode::CreateBasicOuterScope()
 {
-	return std::shared_ptr<ScopeNode>();
+	auto ptr = std::shared_ptr<ScopeNode>(new ScopeNode());
+	ptr->Init();
+	return ptr;
 }
 
 void ScopeNode::AddChild(const std::shared_ptr<ScopeNode>& pChild)
@@ -32,11 +35,13 @@ ScopeNode::ScopeNode(const std::shared_ptr<ScopeNode>& pParentNode)
 	: m_pParentNode(pParentNode)
 {
 	m_pParentNode->AddChild(shared_from_this());
-	m_pScope = Scope::Create(shared_from_this());
 }
 
 ScopeNode::ScopeNode()
 	: m_pParentNode(nullptr)
+{}
+
+void ScopeNode::Init()
 {
 	m_pScope = Scope::Create(shared_from_this());
 }

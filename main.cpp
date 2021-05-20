@@ -1,5 +1,4 @@
 #include <CompilerDriver.h>
-#include <Visitors/Visitor.h>
 #include <Visitors/SymbolTableVisitor.h>
 #include <iostream>
 

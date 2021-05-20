@@ -2,6 +2,11 @@
 #include "Visitor.h"
 
 #include <SymbolTree/ScopeTree.h>
+#include <stack>
+#include <utility>
+
+class Scope;
+class ScopeNode;
 
 class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<SymbolTableVisitor>
 {
@@ -27,6 +32,16 @@ class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<S
 	void Visit(const std::shared_ptr<Expression>& pNode) override;
 	void Visit(const std::shared_ptr<Type>& pNode) override;
  private:
-	SymbolTableVisitor() = default;
+	std::stack<std::string> m_varTypeStack;
+	std::stack<std::string> m_varNameStack;
+	std::stack<std::string> m_methodRetValueStack;
+	std::stack<std::string> m_methodNameStack;
+	std::stack<std::pair<std::string, std::string>> m_methodArgStack;
+	std::stack<std::string> m_classNameStack;
+
+	std::stack<std::shared_ptr<ScopeNode>> m_scopeStack;
+	std::shared_ptr<Scope> m_pCurrentScope;
+
+	SymbolTableVisitor();
 	ScopeTree scopeTree;
 };

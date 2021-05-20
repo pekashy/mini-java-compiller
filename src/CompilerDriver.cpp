@@ -14,6 +14,7 @@ namespace
 		void SetProgram(const Program::Ptr& pProgram) override;
 		void StartVisitor(PrintVisitor::Ptr pVisitor) override;
 		void StartVisitor(InterpreterVisitor::Ptr pVisitor) override;
+		void StartVisitor(SymbolTableVisitor::Ptr pVisitor) override;
 	 private:
 		std::shared_ptr<Scanner> CreateScanner(const std::string& f);
 		std::shared_ptr<yy::parser> CreateParser(const std::shared_ptr<Scanner>& shScanner);
@@ -72,6 +73,11 @@ void CompilerDriverImpl::StartVisitor(PrintVisitor::Ptr pVisitor)
 }
 
 void CompilerDriverImpl::StartVisitor(InterpreterVisitor::Ptr pVisitor)
+{
+	m_pProgram->Accept(pVisitor);
+}
+
+void CompilerDriverImpl::StartVisitor(SymbolTableVisitor::Ptr pVisitor)
 {
 	m_pProgram->Accept(pVisitor);
 }

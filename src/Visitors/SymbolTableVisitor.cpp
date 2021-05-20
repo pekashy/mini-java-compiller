@@ -8,11 +8,20 @@
 #include <Grammar/Identifier.h>
 #include <Grammar/Statement.h>
 
+#include <SymbolTree/Scope.h>
+#include <SymbolTree/ScopeNode.h>
 
 SymbolTableVisitor::Ptr SymbolTableVisitor::Create()
 {
 	return std::shared_ptr<SymbolTableVisitor>(new SymbolTableVisitor());
 }
+
+
+SymbolTableVisitor::SymbolTableVisitor()
+{
+	m_pCurrentScope = scopeTree.GetRoot()->Get();
+}
+
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<BooleanExpression>& pNode)
 {
@@ -105,3 +114,4 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<Type>& pNode)
 {
 	pNode->Accept(shared_from_this());
 }
+

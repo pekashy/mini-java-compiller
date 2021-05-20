@@ -4,6 +4,7 @@
 
 #include <Visitors/PrintVisitor.h>
 #include <Visitors/InterpreterVisitor.h>
+#include <Visitors/SymbolTableVisitor.h>
 
 #include <memory>
 
@@ -18,6 +19,7 @@ class CompilerDriver
 	virtual void SetProgram(const std::shared_ptr<Program>& pProgram) = 0;
 	virtual void StartVisitor(PrintVisitor::Ptr pVisitor) = 0;
 	virtual void StartVisitor(InterpreterVisitor::Ptr pVisitor) = 0;
+	virtual void StartVisitor(SymbolTableVisitor::Ptr pVisitor) = 0;
 	virtual ~CompilerDriver() = default;
  protected:
 	CompilerDriver() = default;

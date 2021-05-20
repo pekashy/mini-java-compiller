@@ -22,6 +22,7 @@ class ScopeNode : public std::enable_shared_from_this<ScopeNode>
  private:
 	ScopeNode(const Ptr& pParentNode);
 	ScopeNode();
+	void Init();
 
 	std::shared_ptr<Scope> m_pScope;
 
