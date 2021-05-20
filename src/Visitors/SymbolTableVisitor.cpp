@@ -48,6 +48,7 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<FieldInvocation>& pNode)
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<ClassDeclaration>& pNode)
 {
+	ScopeIncrementer autoScopeManager(shared_from_this());
 	pNode->Accept(shared_from_this());
 }
 
@@ -106,6 +107,7 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<MethodInvocation>& pNode)
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<MainClassDeclaration>& pNode)
 {
+	ScopeIncrementer autoScopeManager(shared_from_this());
 	pNode->Accept(shared_from_this());
 }
 

@@ -171,6 +171,7 @@ namespace
 
 		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
 		{
+			ScopeIncrementer autoScopeManager(pVisitor);
 			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
 		}
 
@@ -211,6 +212,7 @@ namespace
 
 		void Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor) override
 		{
+			ScopeIncrementer autoScopeManager(pVisitor);
 			GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
 		}
 
