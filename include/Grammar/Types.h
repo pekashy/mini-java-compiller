@@ -4,6 +4,8 @@
 
 class Identifier;
 
+#include <string>
+
 enum class Types
 {
 	None, Int, Boolean, Void
@@ -14,6 +16,7 @@ class Type : public GrammarNode
  public:
 	using Ptr = std::shared_ptr<Type>;
 	virtual ~Type() = default;
+	virtual std::string GetType() const = 0;
  protected:
 	explicit Type(const Ptr& pType);
 	Type() = default;
@@ -29,6 +32,7 @@ class SimpleType : public Type
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
+	std::string GetType() const override;
  private:
 	explicit SimpleType(Types m_eIdentKW);
 	explicit SimpleType(const std::shared_ptr<Identifier>& pIdentifier);
@@ -47,6 +51,7 @@ class ArrayType : public Type
 	void Accept(const std::shared_ptr<PrintVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<InterpreterVisitor>& pVisitor) override;
 	void Accept(const std::shared_ptr<SymbolTableVisitor> &pVisitor) override;
+	std::string GetType() const override;
  private:
 	explicit ArrayType(const SimpleType::Ptr& m_pType);
 

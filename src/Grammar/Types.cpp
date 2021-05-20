@@ -23,6 +23,20 @@ SimpleType::SimpleType(const Identifier::Ptr &pIdentifier)
     : m_pIdentifier(pIdentifier) {}
 
 
+std::string SimpleType::GetType() const
+{
+	switch(m_eIdentKW)
+	{
+	case Types::Int:
+		return "int";
+	case Types::Boolean:
+		return "bool";
+	case Types::Void:
+		return "void";
+	}
+	return "none";
+}
+
 void SimpleType::Accept(const std::shared_ptr<PrintVisitor> &pVisitor)
 {
     std::cout << "SimpleType '" << static_cast<int>(m_eIdentKW) << "' Visited" << std::endl;
@@ -92,4 +106,13 @@ void ArrayType::GenericAccept(const V &pVisitor)
     {
         pVisitor->Visit(m_pAssociatedType);
     }
+}
+
+std::string ArrayType::GetType() const
+{
+	if(m_pAssociatedType)
+	{
+		return m_pAssociatedType->GetType();
+	}
+	return "none";
 }

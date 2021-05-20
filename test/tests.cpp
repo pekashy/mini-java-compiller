@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 
-#include <SymbolTree/ScopeTree.h>
 #include <Objects/ClassObject.h>
 #include <CompilerDriver.h>
 #include <Visitors/SymbolTableVisitor.h>
@@ -42,7 +41,7 @@ TEST(Visitors, InterpreterVisitorTest)
 TEST(Visitors, SymbolTableVisitorTest)
 {
 	auto pDriver = CompilerDriver::Create(0, 0, 0);
-	ASSERT_EQ(pDriver->Parse("../interpreter-code.in"), 0);
+	ASSERT_EQ(pDriver->Parse("../code.in"), 0);
 	auto sVisitor = SymbolTableVisitor::Create();
 	pDriver->StartVisitor(sVisitor);
 }

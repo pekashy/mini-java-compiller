@@ -11,6 +11,8 @@
 #include <SymbolTree/Scope.h>
 #include <SymbolTree/ScopeNode.h>
 
+#include <Objects/VariableObject.h>
+
 SymbolTableVisitor::Ptr SymbolTableVisitor::Create()
 {
 	return std::shared_ptr<SymbolTableVisitor>(new SymbolTableVisitor());
@@ -20,6 +22,7 @@ SymbolTableVisitor::Ptr SymbolTableVisitor::Create()
 SymbolTableVisitor::SymbolTableVisitor()
 {
 	m_pCurrentScope = scopeTree.GetRoot()->Get();
+	m_scopeStack.push(scopeTree.GetRoot());
 }
 
 
@@ -51,12 +54,18 @@ void SymbolTableVisitor::Visit(const std::shared_ptr<ClassDeclaration>& pNode)
 void SymbolTableVisitor::Visit(const std::shared_ptr<Declaration>& pNode)
 {
 	pNode->Accept(shared_from_this());
-
 }
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<VariableDeclaration>& pNode)
 {
 	pNode->Accept(shared_from_this());
+	std::string variableName = m_varNameStack.top();
+	std::string variableType = m_varTypeStack.top();
+	auto pVarObject = VariableObject::Create(variableType, variableName);
+	pVarObject->SetCorrespondingScope(m_pCurrentScope);
+	m_pCurrentScope->DeclareSymbol(variableName, pVarObject);
+	m_varNameStack.pop();
+	m_varTypeStack.pop();
 }
 
 void SymbolTableVisitor::Visit(const std::shared_ptr<SimpleType>& pNode)

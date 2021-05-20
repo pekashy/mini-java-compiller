@@ -4,6 +4,9 @@
 #include <SymbolTree/ScopeTree.h>
 #include <stack>
 #include <utility>
+#include <boost/core/noncopyable.hpp>
+
+#include <stdexcept>
 
 class Scope;
 class ScopeNode;
@@ -31,6 +34,34 @@ class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<S
 	void Visit(const std::shared_ptr<MethodDeclaration>& pNode) override;
 	void Visit(const std::shared_ptr<Expression>& pNode) override;
 	void Visit(const std::shared_ptr<Type>& pNode) override;
+
+	void AddVarType(const std::string& varType)
+	{
+		m_varTypeStack.push(varType);
+	}
+
+	void AddVarName(const std::string& varName)
+	{
+		m_varNameStack.push(varName);
+	}
+
+	void EnterNewScope()
+	{
+		m_scopeStack.push(ScopeNode::Create(m_scopeStack.top()));
+		m_pCurrentScope = m_scopeStack.top()->Get();
+	}
+
+	void ExitCurrentScope()
+	{
+		if(m_scopeStack.size() < 2)
+		{
+			throw std::runtime_error("trying toexit main scope during execution!");
+		}
+
+		m_scopeStack.pop();
+		m_pCurrentScope = m_scopeStack.top()->Get();
+	}
+
  private:
 	std::stack<std::string> m_varTypeStack;
 	std::stack<std::string> m_varNameStack;
@@ -44,4 +75,21 @@ class SymbolTableVisitor : public Visitor, public std::enable_shared_from_this<S
 
 	SymbolTableVisitor();
 	ScopeTree scopeTree;
+};
+
+class ScopeIncrementer : public boost::noncopyable
+{
+ public:
+	ScopeIncrementer(const SymbolTableVisitor::Ptr& pVisitor)
+	{
+		m_pVisitor->EnterNewScope();
+	}
+
+	~ScopeIncrementer()
+	{
+		m_pVisitor->ExitCurrentScope();
+	}
+
+ private:
+	SymbolTableVisitor::Ptr m_pVisitor;
 };

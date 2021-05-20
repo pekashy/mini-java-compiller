@@ -167,6 +167,8 @@ void VariableDeclaration::Accept(const std::shared_ptr<InterpreterVisitor>& pVis
 void VariableDeclaration::Accept(const std::shared_ptr<SymbolTableVisitor>& pVisitor)
 {
 	GenericAccept<SymbolTableVisitor::Ptr>(pVisitor);
+	pVisitor->AddVarType(m_pType->GetType());
+	pVisitor->AddVarName(m_pIdentifier->GetId());
 }
 
 template<class V> void VariableDeclaration::GenericAccept(const V& pVisitor)
