@@ -17,7 +17,7 @@ class ScopeNode : public std::enable_shared_from_this<ScopeNode>
 	Scope::Ptr Get() const;
 
 	// Utility:
-	bool Contains(const Symbol& symbol);
+	std::shared_ptr<const Scope> FindScopeWhichContains(const Symbol& symbol) const;
 
  private:
 	ScopeNode(const Ptr& pParentNode);

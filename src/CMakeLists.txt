@@ -8,6 +8,9 @@ add_subdirectory(Objects)
 
 add_library(Driver CompilerDriver.cpp ScannerImpl.cpp Location.cpp)
 
+add_dependencies(Objects Grammar)
+target_link_libraries(Objects Grammar)
+
 add_dependencies(SymbolTree Objects)
 target_link_libraries(SymbolTree Objects)
 

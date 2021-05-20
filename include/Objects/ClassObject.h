@@ -2,10 +2,8 @@
 
 #include "Object.h"
 
-#include <vector>
-#include <string>
+#include "MethodObject.h"
 
-class Scope;
 
 class ClassObject : public Object
 {
@@ -18,8 +16,23 @@ class ClassObject : public Object
 		return ObjectType::Class;
 	}
 
+
+	void AddMethod(const std::shared_ptr<MethodObject>& pMethod)
+	{
+		m_pMethods.push_back(pMethod);
+	}
+
+
+	void AddField(const std::shared_ptr<MethodObject>& pMethod)
+	{
+		m_pMethods.push_back(pMethod);
+	}
+
+
  private:
 	ClassObject(const std::string& className);
 
 	std::string m_name;
+	std::vector<std::shared_ptr<MethodObject>> m_pMethods;
+	std::vector<std::shared_ptr<VariableObject>> m_pFields;
 };

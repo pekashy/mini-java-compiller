@@ -1,11 +1,15 @@
 #include "gtest/gtest.h"
 
 #include <SymbolTree/ScopeTree.h>
+#include <Objects/ClassObject.h>
 
-TEST(TSuite, FirstTest)
+TEST(SymbolTree, ClassCreationTest)
+{
+	auto classObject = ClassObject::Create("ClassObjectName");
+}
+
+TEST(SymbolTree, ScopeTreeCreationTest)
 {
 	ScopeTree tree;
 	auto root = tree.GetRoot();
-
-	printf("Hello World!");
 }

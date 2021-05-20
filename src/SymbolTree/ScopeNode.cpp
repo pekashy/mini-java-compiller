@@ -41,12 +41,12 @@ ScopeNode::ScopeNode()
 	m_pScope = Scope::Create(shared_from_this());
 }
 
-bool ScopeNode::Contains(const Symbol& symbol)
+std::shared_ptr<const Scope> ScopeNode::FindScopeWhichContains(const Symbol& symbol) const
 {
 	if(m_pParentNode == nullptr)
 	{
-		return false;
+		return nullptr;
 	}
 
-	return m_pParentNode->Get()->Contains(symbol);
+	return m_pParentNode->Get()->FindScopeWhichContains(symbol);
 }
