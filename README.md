@@ -39,3 +39,5 @@ class Factorial {
   }
 }
 ```
+- Implemented Symbol table structure
+- In Progress: Symbol table visitors
